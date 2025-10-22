@@ -9,6 +9,7 @@ class APIConfig:
     API_KEY: str = os.getenv("API_FOOTBALL_KEY", "54cbc9ceee66b541b1a2a1066ac2499c")
     RATE_LIMIT: int = 10  # requests per minute
     TIMEOUT: int = 30
+    CACHE_TTL: int = 3600 * 4
 
 
 @dataclass

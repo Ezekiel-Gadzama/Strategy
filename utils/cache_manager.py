@@ -1,11 +1,131 @@
 import requests
 import time
+import json
+import os
+import hashlib
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 import logging
 from config.settings import APIConfig
 from data.models import Match, MatchEvent, EventType, TeamStats, HalfStats
-from utils.cache_manager import CacheManager
+
+
+class CacheManager:
+    """Manages caching of API responses to reduce API calls"""
+
+    def __init__(self, cache_dir: str = "cache", ttl: int = 3600):
+        self.cache_dir = cache_dir
+        self.ttl = ttl  # Time to live in seconds (1 hour default)
+        self._ensure_cache_dir()
+
+    def _ensure_cache_dir(self):
+        """Create cache directory if it doesn't exist"""
+        if not os.path.exists(self.cache_dir):
+            os.makedirs(self.cache_dir)
+
+    def _get_cache_key(self, endpoint: str, params: Dict[str, Any]) -> str:
+        """Generate a unique cache key for the request"""
+        key_string = f"{endpoint}:{json.dumps(params, sort_keys=True)}"
+        return hashlib.md5(key_string.encode()).hexdigest()
+
+    def _get_cache_file_path(self, cache_key: str) -> str:
+        """Get the file path for a cache key"""
+        return os.path.join(self.cache_dir, f"{cache_key}.json")
+
+    def get(self, endpoint: str, params: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """Get cached response if exists and not expired"""
+        cache_key = self._get_cache_key(endpoint, params)
+        cache_file = self._get_cache_file_path(cache_key)
+
+        if not os.path.exists(cache_file):
+            return None
+
+        try:
+            with open(cache_file, 'r', encoding='utf-8') as f:
+                cached_data = json.load(f)
+
+            # Check if cache is expired
+            cache_time = datetime.fromisoformat(cached_data['timestamp'])
+            current_time = datetime.now()
+            time_diff = (current_time - cache_time).total_seconds()
+
+            if time_diff > self.ttl:
+                self.logger.debug(f"Cache expired for {endpoint}")
+                return None
+
+            self.logger.debug(f"Using cached response for {endpoint}")
+            return cached_data['response']
+
+        except (json.JSONDecodeError, KeyError, ValueError) as e:
+            self.logger.warning(f"Invalid cache file {cache_file}: {e}")
+            # Remove corrupted cache file
+            try:
+                os.remove(cache_file)
+            except OSError:
+                pass
+            return None
+
+    def set(self, endpoint: str, params: Dict[str, Any], response: Dict[str, Any]):
+        """Cache the API response"""
+        cache_key = self._get_cache_key(endpoint, params)
+        cache_file = self._get_cache_file_path(cache_key)
+
+        try:
+            cache_data = {
+                'timestamp': datetime.now().isoformat(),
+                'endpoint': endpoint,
+                'params': params,
+                'response': response
+            }
+
+            with open(cache_file, 'w', encoding='utf-8') as f:
+                json.dump(cache_data, f, indent=2, ensure_ascii=False)
+
+            self.logger.debug(f"Cached response for {endpoint}")
+
+        except Exception as e:
+            self.logger.error(f"Failed to cache response: {e}")
+
+    def clear_expired(self):
+        """Clear all expired cache files"""
+        current_time = datetime.now()
+        cleared_count = 0
+
+        for filename in os.listdir(self.cache_dir):
+            if filename.endswith('.json'):
+                cache_file = os.path.join(self.cache_dir, filename)
+                try:
+                    with open(cache_file, 'r', encoding='utf-8') as f:
+                        cached_data = json.load(f)
+
+                    cache_time = datetime.fromisoformat(cached_data['timestamp'])
+                    time_diff = (current_time - cache_time).total_seconds()
+
+                    if time_diff > self.ttl:
+                        os.remove(cache_file)
+                        cleared_count += 1
+
+                except (json.JSONDecodeError, KeyError, ValueError, OSError):
+                    # Remove corrupted files
+                    try:
+                        os.remove(cache_file)
+                        cleared_count += 1
+                    except OSError:
+                        pass
+
+        if cleared_count > 0:
+            self.logger.info(f"Cleared {cleared_count} expired cache files")
+
+    def clear_all(self):
+        """Clear all cache files"""
+        for filename in os.listdir(self.cache_dir):
+            if filename.endswith('.json'):
+                cache_file = os.path.join(self.cache_dir, filename)
+                try:
+                    os.remove(cache_file)
+                except OSError:
+                    pass
+        self.logger.info("Cleared all cache files")
 
 
 class APIFootballClient:
