@@ -1,10 +1,10 @@
 import requests
 import time
 from typing import List, Dict, Any, Optional
-from datetime import datetime, timedelta
+from datetime import datetime
 import logging
 from config.settings import APIConfig
-from data.models import Match, MatchEvent, EventType
+from data.models import Match, MatchEvent, EventType, TeamStats, HalfStats
 
 
 class APIFootballClient:
@@ -12,7 +12,8 @@ class APIFootballClient:
         self.config = config
         self.session = requests.Session()
         self.session.headers.update({
-            'x-apisports-key': config.API_KEY
+            'x-rapidapi-key': config.API_KEY,
+            'x-rapidapi-host': 'v3.football.api-sports.io'
         })
         self.logger = logging.getLogger(__name__)
         self.last_request_time = 0
@@ -25,7 +26,6 @@ class APIFootballClient:
 
         if time_since_last < min_interval:
             time.sleep(min_interval - time_since_last)
-
         self.last_request_time = time.time()
 
     def _make_request(self, endpoint: str, params: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -38,89 +38,281 @@ class APIFootballClient:
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
-            self.logger.error(f"API request failed: {e}")
+            self.logger.error(f"API request failed for {endpoint}: {e}")
             return None
 
     def get_leagues(self) -> List[Dict[str, Any]]:
         """Get available leagues"""
-        return self._make_request("leagues", {})
+        response = self._make_request("leagues", {"current": "true"})
+        return response.get("response", []) if response else []
 
-    def get_teams(self, league_id: int, season: int) -> List[Dict[str, Any]]:
-        """Get teams for a league and season"""
-        params = {'league': league_id, 'season': season}
-        return self._make_request("teams", params)
-
-    def get_matches(self, league_id: int, season: int) -> List[Dict[str, Any]]:
+    def get_matches(self, league_id: int, season: int, round: Optional[str] = None) -> List[Dict[str, Any]]:
         """Get matches for a league and season"""
         params = {'league': league_id, 'season': season}
-        return self._make_request("fixtures", params)
+        if round:
+            params['round'] = round
+
+        response = self._make_request("fixtures", params)
+        return response.get("response", []) if response else []
 
     def get_match_events(self, match_id: int) -> List[Dict[str, Any]]:
         """Get events for a specific match"""
         params = {'fixture': match_id}
-        return self._make_request("fixtures/events", params)
+        response = self._make_request("fixtures/events", params)
+        return response.get("response", []) if response else []
 
     def get_match_statistics(self, match_id: int) -> List[Dict[str, Any]]:
         """Get statistics for a specific match"""
         params = {'fixture': match_id}
-        return self._make_request("fixtures/statistics", params)
+        response = self._make_request("fixtures/statistics", params)
+        return response.get("response", []) if response else []
+
+    def get_match_lineups(self, match_id: int) -> List[Dict[str, Any]]:
+        """Get lineups for a specific match"""
+        params = {'fixture': match_id}
+        response = self._make_request("fixtures/lineups", params)
+        return response.get("response", []) if response else []
 
     def parse_match_data(self, match_data: Dict[str, Any]) -> Match:
-        """Parse raw match data into Match object"""
-        # This is a simplified parser - you'd expand this based on API response structure
-        events = self._extract_events(match_data)
+        """Parse raw match data into comprehensive Match object"""
+        fixture = match_data['fixture']
+        league = match_data['league']
+        teams = match_data['teams']
+        goals = match_data['goals']
+        score = match_data.get('score', {})
 
-        return Match(
-            id=match_data['fixture']['id'],
-            league=match_data['league']['name'],
-            season=match_data['league']['season'],
-            date=match_data['fixture']['date'],
-            home_team=match_data['teams']['home']['name'],
-            away_team=match_data['teams']['away']['name'],
-            score_home=match_data['goals']['home'] or 0,
-            score_away=match_data['goals']['away'] or 0,
-            events=events
+        # Create basic match object
+        match = Match(
+            id=fixture['id'],
+            league=league['name'],
+            league_id=league['id'],
+            season=league['season'],
+            date=fixture['date'],
+            home_team=teams['home']['name'],
+            home_team_id=teams['home']['id'],
+            away_team=teams['away']['name'],
+            away_team_id=teams['away']['id'],
+            score_home=goals['home'] or 0,
+            score_away=goals['away'] or 0,
+            status=fixture['status']['short'],
+            referee=fixture.get('referee'),
+            venue_id=match_data.get('venue', {}).get('id'),
+            venue_city=match_data.get('venue', {}).get('city')
         )
 
-    def _extract_events(self, match_data: Dict[str, Any]) -> List[MatchEvent]:
-        """Extract various events from match data"""
-        events = []
+        # Fetch and process additional data
+        self._enrich_match_data(match)
+        return match
 
-        # Extract goals
-        events.extend(self._extract_goal_events(match_data))
+    def _enrich_match_data(self, match: Match):
+        """Enrich match data with events, statistics, and detailed info"""
+        # Get match events
+        events_data = self.get_match_events(match.id)
+        self._process_events(match, events_data)
 
-        # Extract cards
-        events.extend(self._extract_card_events(match_data))
+        # Get match statistics
+        stats_data = self.get_match_statistics(match.id)
+        self._process_statistics(match, stats_data)
 
-        # Extract other statistics
-        events.extend(self._extract_statistical_events(match_data))
+        # Extract half-time statistics from events
+        self._extract_half_stats(match, events_data)
 
-        return events
+        # Generate derived events for pattern analysis
+        self._generate_derived_events(match)
 
-    def _extract_goal_events(self, match_data: Dict[str, Any]) -> List[MatchEvent]:
-        """Extract goal-related events"""
-        events = []
-        home_score = match_data['goals']['home'] or 0
-        away_score = match_data['goals']['away'] or 0
+    def _process_events(self, match: Match, events_data: List[Dict[str, Any]]):
+        """Process match events"""
+        for event_data in events_data:
+            event_type = self._classify_event_type(event_data)
+            if not event_type:
+                continue
 
-        # Total goals
-        events.append(MatchEvent(EventType.GOALS, home_score + away_score))
+            event = MatchEvent(
+                event_type=event_type,
+                value=1,  # Count for discrete events
+                team=event_data.get('team', {}).get('name'),
+                minute=event_data.get('time', {}).get('elapsed'),
+                is_home=event_data.get('team', {}).get('id') == match.home_team_id,
+                description=self._get_event_description(event_data)
+            )
+            match.events.append(event)
 
-        # Home/Away goals
-        events.append(MatchEvent(EventType.GOALS, home_score, is_home=True))
-        events.append(MatchEvent(EventType.GOALS, away_score, is_home=False))
+    def _classify_event_type(self, event_data: Dict[str, Any]) -> Optional[EventType]:
+        """Classify event type from API data"""
+        event_type = event_data.get('type')
+        detail = event_data.get('detail')
 
-        return events
+        if event_type in ['Goal', 'Penalty', 'Missed Penalty']:
+            return EventType.GOALS
+        elif event_type in ['Card', 'Yellow Card', 'Red Card']:
+            return EventType.CARDS
+        elif event_type == 'Corner':
+            return EventType.CORNERS
+        elif event_type == 'Subst':
+            return EventType.TEAM_STATS
+        elif event_type == 'Var':
+            return EventType.TEAM_STATS
+        elif event_type == 'Foul':
+            return EventType.FOULS
+        elif event_type == 'Offside':
+            return EventType.OFFSIDES
 
-    def _extract_card_events(self, match_data: Dict[str, Any]) -> List[MatchEvent]:
-        """Extract card-related events"""
-        events = []
-        # This would parse actual card events from the API
-        # For now, using placeholder logic
-        return events
+        return None
 
-    def _extract_statistical_events(self, match_data: Dict[str, Any]) -> List[MatchEvent]:
-        """Extract various statistical events"""
-        events = []
-        # This would parse statistics like shots, corners, possession, etc.
-        return events
+    def _get_event_description(self, event_data: Dict[str, Any]) -> str:
+        """Generate descriptive text for event"""
+        event_type = event_data.get('type', '')
+        detail = event_data.get('detail', '')
+        player = event_data.get('player', {}).get('name', '')
+
+        if event_type == 'Goal':
+            if detail == 'Normal Goal':
+                return f"Goal by {player}"
+            elif detail == 'Own Goal':
+                return f"Own goal by {player}"
+            elif detail == 'Penalty':
+                return f"Penalty goal by {player}"
+        elif event_type in ['Yellow Card', 'Red Card']:
+            return f"{event_type} for {player}"
+        elif event_type == 'Corner':
+            return "Corner kick"
+
+        return f"{event_type}: {detail}"
+
+    def _process_statistics(self, match: Match, stats_data: List[Dict[str, Any]]):
+        """Process match statistics"""
+        if not stats_data:
+            return
+
+        for team_stats in stats_data:
+            team_id = team_stats['team']['id']
+            is_home = team_id == match.home_team_id
+
+            stats_dict = {}
+            for stat in team_stats.get('statistics', []):
+                stats_dict[stat['type']] = self._safe_convert_stat(stat['value'])
+
+            team_stats_obj = TeamStats(
+                team_id=team_id,
+                team_name=team_stats['team']['name'],
+                shots_on_goal=stats_dict.get('Shots on Goal', 0),
+                shots_off_goal=stats_dict.get('Shots off Goal', 0),
+                shots_insidebox=stats_dict.get('Shots insidebox', 0),
+                shots_outsidebox=stats_dict.get('Shots outsidebox', 0),
+                total_shots=stats_dict.get('Total Shots', 0),
+                blocked_shots=stats_dict.get('Blocked Shots', 0),
+                fouls=stats_dict.get('Fouls', 0),
+                corner_kicks=stats_dict.get('Corner Kicks', 0),
+                offsides=stats_dict.get('Offsides', 0),
+                ball_possession=stats_dict.get('Ball Possession', 0),
+                yellow_cards=stats_dict.get('Yellow Cards', 0),
+                red_cards=stats_dict.get('Red Cards', 0),
+                goalkeeper_saves=stats_dict.get('Goalkeeper Saves', 0),
+                total_passes=stats_dict.get('Total passes', 0),
+                passes_accurate=stats_dict.get('Passes accurate', 0),
+                passes_percentage=stats_dict.get('Passes %', 0.0)
+            )
+
+            if is_home:
+                match.home_stats = team_stats_obj
+            else:
+                match.away_stats = team_stats_obj
+
+    def _extract_half_stats(self, match: Match, events_data: List[Dict[str, Any]]):
+        """Extract statistics for each half from events"""
+        first_half = HalfStats()
+        second_half = HalfStats()
+
+        for event in events_data:
+            minute = event.get('time', {}).get('elapsed')
+            if not minute:
+                continue
+
+            is_home = event.get('team', {}).get('id') == match.home_team_id
+            half = first_half if minute <= 45 else second_half
+
+            # Count goals
+            if event.get('type') == 'Goal':
+                if is_home:
+                    half.home_goals += 1
+                else:
+                    half.away_goals += 1
+
+            # Count cards
+            elif event.get('type') in ['Yellow Card', 'Red Card']:
+                if is_home:
+                    half.home_cards += 1
+                else:
+                    half.away_cards += 1
+
+            # Count corners
+            elif event.get('type') == 'Corner':
+                if is_home:
+                    half.home_corners += 1
+                else:
+                    half.away_corners += 1
+
+        match.first_half = first_half
+        match.second_half = second_half
+
+    def _generate_derived_events(self, match: Match):
+        """Generate derived events for pattern analysis"""
+        # Half-time result events
+        first_half_result = self._get_half_result(match.first_half)
+        match.events.append(MatchEvent(
+            event_type=EventType.HALF_STATS,
+            value=first_half_result,
+            description="first_half_result"
+        ))
+
+        # Total cards
+        total_cards = ((match.home_stats.yellow_cards + match.home_stats.red_cards) if match.home_stats else 0) + \
+                      ((match.away_stats.yellow_cards + match.away_stats.red_cards) if match.away_stats else 0)
+        match.events.append(MatchEvent(
+            event_type=EventType.CARDS,
+            value=total_cards,
+            description="total_cards"
+        ))
+
+        # Total corners
+        total_corners = ((match.home_stats.corner_kicks if match.home_stats else 0) +
+                         (match.away_stats.corner_kicks if match.away_stats else 0))
+        match.events.append(MatchEvent(
+            event_type=EventType.CORNERS,
+            value=total_corners,
+            description="total_corners"
+        ))
+
+        # Add more derived events as needed...
+
+    def _get_half_result(self, half: HalfStats) -> str:
+        """Get result for a half"""
+        if half.home_goals > half.away_goals:
+            return "home"
+        elif half.away_goals > half.home_goals:
+            return "away"
+        else:
+            return "draw"
+
+    def _safe_convert_stat(self, value: Any) -> Any:
+        """Safely convert statistic values"""
+        if value is None:
+            return 0
+        if isinstance(value, (int, float)):
+            return value
+        if isinstance(value, str):
+            # Handle percentage values
+            if '%' in value:
+                try:
+                    return float(value.replace('%', ''))
+                except (ValueError, TypeError):
+                    return 0.0
+            # Handle numeric strings
+            try:
+                return int(value)
+            except (ValueError, TypeError):
+                try:
+                    return float(value)
+                except (ValueError, TypeError):
+                    return 0
+        return 0

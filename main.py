@@ -57,7 +57,7 @@ class FootballDataAnalyzer:
             return []
 
         # Limit sample to avoid API quota exhaustion
-        for league_name, league_id in list(league_name_to_id.items())[:3]:
+        for league_name, league_id in list(league_name_to_id.items())[:1]:
             self.logger.info(f"Fetching matches for league: {league_name}")
             fixtures_response = self.api_client.get_matches(
                 league_id=league_id,
@@ -69,9 +69,11 @@ class FootballDataAnalyzer:
                 continue
 
             # Take up to 10 matches per league for sampling
-            for fixture_data in fixtures_response["response"][:10]:
+            for fixture_data in fixtures_response["response"][:1]:
+                print(f"Match fixture_data:\n {fixture_data}")
                 try:
                     match = self.api_client.parse_match_data(fixture_data)
+                    print(f"Match:\n {match}")
                     matches.append(match)
                 except Exception as e:
                     self.logger.error(f"Failed to parse match data: {e}")
@@ -80,42 +82,25 @@ class FootballDataAnalyzer:
         return matches
 
     def _print_results(self, results: Dict[str, Any]):
-        """Print analysis results in readable format"""
         print("\n" + "=" * 80)
         print("FOOTBALL EVENT PATTERN ANALYSIS RESULTS")
         print("=" * 80)
 
-        print(f"\nTotal Matches Analyzed: {results['total_matches']}")
-        print(f"Total Patterns Analyzed: {results['total_patterns_analyzed']}")
+        for league, league_data in results.items():
+            print(f"\n### {league.upper()} ###")
+            print(f"Matches analyzed: {league_data['total_matches']}")
+            print(f"Patterns analyzed: {league_data['total_patterns_analyzed']}")
 
-        print("\n" + "-" * 40)
-        print("NEVER OCCURRED COMBINATIONS (Top 10)")
-        print("-" * 40)
-        for i, combo in enumerate(results['never_occurred'][:5], 1):
-            print(f"\n{i}. Combination of {combo['combination_size']} events:")
-            for event in combo['events']:
-                print(f"   - {event['description']}")
-            print(f"   Occurrences: {combo['occurrence_count']} ({combo['percentage']:.4f}%)")
+            for category in ['never_occurred', 'least_occurred', 'most_occurred']:
+                print("\n" + "-" * 40)
+                print(f"{category.replace('_', ' ').upper()} (Top 5)")
+                print("-" * 40)
 
-        print("\n" + "-" * 40)
-        print("LEAST OCCURRED COMBINATIONS (Top 5)")
-        print("-" * 40)
-        for i, combo in enumerate(results['least_occurred'][:5], 1):
-            print(f"\n{i}. Combination of {combo['combination_size']} events:")
-            for event in combo['events']:
-                print(f"   - {event['description']}")
-            print(f"   Occurrences: {combo['occurrence_count']} ({combo['percentage']:.4f}%)")
-            print(f"   Leagues: {', '.join(combo['leagues'])}")
-
-        print("\n" + "-" * 40)
-        print("MOST OCCURRED COMBINATIONS (Top 5)")
-        print("-" * 40)
-        for i, combo in enumerate(results['most_occurred'][:5], 1):
-            print(f"\n{i}. Combination of {combo['combination_size']} events:")
-            for event in combo['events']:
-                print(f"   - {event['description']}")
-            print(f"   Occurrences: {combo['occurrence_count']} ({combo['percentage']:.4f}%)")
-            print(f"   Leagues: {', '.join(combo['leagues'])}")
+                for i, combo in enumerate(league_data[category][:5], 1):
+                    print(f"\n{i}. Combination of {combo['combination_size']} events:")
+                    for event in combo['events']:
+                        print(f"   - {event['description']}")
+                    print(f"   Occurrences: {combo['occurrence_count']} ({combo['percentage']:.4f}%)")
 
 
 def main():
