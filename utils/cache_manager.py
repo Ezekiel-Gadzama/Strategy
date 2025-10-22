@@ -8,12 +8,14 @@ from datetime import datetime
 import logging
 from config.settings import APIConfig
 from data.models import Match, MatchEvent, EventType, TeamStats, HalfStats
+from utils.logger import setup_logger
 
 
 class CacheManager:
     """Manages caching of API responses to reduce API calls"""
 
     def __init__(self, cache_dir: str = "cache", ttl: int = 3600):
+        self.logger = setup_logger(__name__)
         self.cache_dir = cache_dir
         self.ttl = ttl  # Time to live in seconds (1 hour default)
         self._ensure_cache_dir()
