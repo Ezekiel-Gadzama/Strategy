@@ -1,21 +1,20 @@
+from datetime import datetime
 from typing import List, Dict, Any, Set, Tuple
-from itertools import combinations, product, islice
-from collections import Counter, defaultdict
+from itertools import combinations
+from collections import defaultdict, Counter
 import logging
 import concurrent.futures
-import threading
 from data.models import Match
-from patterns.event_patterns import EventPatterns, EventCondition
+from patterns.event_patterns import EventPatterns
 from config.settings import AnalysisConfig
-from utils.progress_manager import ProgressManager
-
+from utils.results_manager import ResultsManager
 
 class PatternAnalyzer:
     def __init__(self, config: AnalysisConfig):
         self.config = config
         self.logger = logging.getLogger(__name__)
         self.all_patterns = EventPatterns.get_all_patterns()
-        self.progress_manager = ProgressManager()
+        self.results_manager = ResultsManager()
 
         print(f"length of pattern: {len(self.all_patterns)}")
 
@@ -27,7 +26,6 @@ class PatternAnalyzer:
 
         # Threading
         self.thread_count = config.THREAD_COUNT
-        self.combination_lock = threading.Lock()
 
     def _organize_patterns(self):
         """Organize patterns in hierarchical structure for efficient combination generation"""
@@ -45,292 +43,269 @@ class PatternAnalyzer:
         self.logger.info(
             f"Organized {len(self.all_patterns)} patterns into {len(self.patterns_by_event_type)} event types")
 
-    def set_combination_strategy(self, strategy: str):
-        """Set the combination strategy"""
-        valid_strategies = ["by_event_type", "by_market", "full"]
-        if strategy not in valid_strategies:
-            raise ValueError(f"Strategy must be one of {valid_strategies}")
-        self.combination_strategy = strategy
-        self.logger.info(f"Combination strategy set to: {strategy}")
-
     def analyze_matches(self, matches: List[Match]) -> Dict[str, Any]:
-        """Analyze matches league by league with optimized combination checking"""
+        """Analyze matches league by league with comprehensive tracking"""
         leagues = set((m.league, m.league_id, m.season) for m in matches)
         league_results = {}
-
-        # Precompute match patterns for all matches
-        all_match_patterns = self._find_match_patterns(matches)
 
         for league_name, league_id, season in leagues:
             league_matches = [m for m in matches if
                               m.league == league_name and m.league_id == league_id and m.season == season]
             self.logger.info(f"Analyzing {len(league_matches)} matches in {league_name} ({season})")
+            print(f"🚀 Starting analysis for {league_name} {season} with {len(league_matches)} matches")
 
-            # Filter match patterns for this league
-            league_match_patterns = {match_id: patterns for match_id, patterns in all_match_patterns.items()
-                                     if any(m.id == match_id and m.league == league_name for m in league_matches)}
+            # Get all combinations analysis with optimized per-match approach
+            all_combinations_analysis = self._analyze_matches_optimized(
+                league_matches, league_id, season, league_name
+            )
 
-            # Get all combinations analysis with optimization
-            all_combinations_analysis = self._analyze_all_combinations_optimized(league_match_patterns, league_matches,
-                                                                                 league_id, season)
-
-            league_results[f"{league_name}_{season}"] = {
-                'never_occurred': all_combinations_analysis['never_occurred'],
-                'least_occurred': all_combinations_analysis['least_occurred'],
-                'most_occurred': all_combinations_analysis['most_occurred'],
-                'total_matches': len(league_matches),
-                'total_patterns_analyzed': len(self.all_patterns),
-                'combination_strategy': self.combination_strategy,
-                'stats': all_combinations_analysis['stats']
-            }
+            league_results[f"{league_name}_{season}"] = all_combinations_analysis
 
         return league_results
 
-    def _find_match_patterns(self, matches: List[Match]) -> Dict[int, Set[str]]:
-        """Find which patterns occur in each match"""
-        match_patterns = {}
+    def _analyze_matches_optimized(self, matches: List[Match], league_id: int, season: int, league_name: str) -> Dict[
+        str, Any]:
+        """Optimized analysis that processes each batch independently and combines at the end"""
+        total_matches = len(matches)
+
+        # Initialize results for this league/season
+        self.results_manager.initialize_league_season(league_id, league_name, season, total_matches)
+
+        print(f"🎯 Processing {total_matches} matches for {league_name} {season}")
+        print(f"🔢 Combination sizes: {self.config.MIN_EVENTS_COMBINATION} to {self.config.MAX_EVENTS_COMBINATION}")
+
+        # Process matches in batches for threading
+        batch_size = max(1, len(matches) // (self.thread_count * 2))
+        all_batch_results = []  # Store results from each batch
+
+        batch_count = 0
+        for batch_start in range(0, len(matches), batch_size):
+            batch_count += 1
+            batch_end = min(batch_start + batch_size, len(matches))
+            match_batch = matches[batch_start:batch_end]
+
+            print(f"\n📊 Processing batch {batch_count}: matches {batch_start}-{batch_end} of {len(matches)}")
+
+            # Process this batch independently
+            batch_result = self._process_batch_independently(match_batch)
+            all_batch_results.append(batch_result)
+
+            print(f"✅ Batch {batch_count} complete: {len(batch_result)} unique combinations found")
+
+        # Combine all batch results at the end
+        print(f"\n🔗 Combining results from {len(all_batch_results)} batches...")
+        final_combinations_counter = self._combine_batch_results(all_batch_results)
+        valid_combinations_count = sum(final_combinations_counter.values())
+
+        # Save final results for this league/season
+        final_results = self._prepare_final_results(final_combinations_counter, total_matches, valid_combinations_count)
+        self.results_manager.save_analysis_results(league_id, season, final_results)
+
+        print(f"🎉 Analysis complete for {league_name} {season}")
+        print(f"📊 Found {len(final_combinations_counter)} unique combinations across {total_matches} matches")
+
+        return final_results
+
+    def _process_batch_independently(self, matches: List[Match]) -> Dict[Tuple[str, ...], int]:
+        """Process a batch of matches independently and return combination counts"""
+        # Split batch for threading
+        sub_batches = [matches[i:i + max(1, len(matches) // self.thread_count)]
+                       for i in range(0, len(matches), max(1, len(matches) // self.thread_count))]
+
+        batch_combinations = Counter()
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=self.thread_count) as executor:
+            future_to_batch = {
+                executor.submit(self._analyze_match_batch, sub_batch): sub_batch
+                for sub_batch in sub_batches if sub_batch
+            }
+
+            for future in concurrent.futures.as_completed(future_to_batch):
+                try:
+                    sub_batch_result = future.result()
+                    # Combine sub-batch results into main batch counter
+                    for combo, count in sub_batch_result.items():
+                        batch_combinations[combo] += count
+                except Exception as e:
+                    self.logger.error(f"Error processing sub-batch: {e}")
+
+        return batch_combinations
+
+    def _combine_batch_results(self, all_batch_results: List[Dict[Tuple[str, ...], int]]) -> Counter:
+        """Combine results from all batches into a single counter"""
+        final_counter = Counter()
+
+        for batch_result in all_batch_results:
+            for combo, count in batch_result.items():
+                final_counter[combo] += count
+
+        return final_counter
+
+    def _analyze_match_batch(self, matches: List[Match]) -> Dict[Tuple[str, ...], int]:
+        """Analyze a batch of matches and return combination counts"""
+        batch_combinations = Counter()
 
         for match in matches:
-            occurring_patterns = set()
-            for pattern in self.all_patterns:
-                try:
-                    if pattern.condition(match):
-                        occurring_patterns.add(pattern.name)
-                except Exception as e:
-                    self.logger.debug(f"Error evaluating pattern {pattern.name}: {e}")
-                    continue
-            match_patterns[match.id] = occurring_patterns
+            # Get patterns that occurred in this specific match
+            occurring_patterns = self._get_occurring_patterns_for_match(match)
 
-        self.logger.info(f"Found patterns for {len(match_patterns)} matches")
-        return match_patterns
-
-    def _generate_combinations_by_strategy(self, size: int) -> List[Tuple[str]]:
-        """Generate combinations based on the selected strategy"""
-        if self.combination_strategy == "by_event_type":
-            return self._generate_combinations_by_event_type(size)
-        elif self.combination_strategy == "by_market":
-            return self._generate_combinations_by_market(size)
-        else:  # full
-            return self._generate_full_combinations(size)
-
-    def _generate_combinations_by_event_type(self, size: int) -> List[Tuple[str]]:
-        """Generate combinations picking one pattern from each EventType"""
-        event_types = list(self.patterns_by_event_type.keys())
-
-        if size > len(event_types):
-            self.logger.warning(f"Requested size {size} exceeds available event types {len(event_types)}")
-            return []
-
-        all_combinations = []
-
-        for event_type_combo in combinations(event_types, size):
-            pattern_choices = []
-            for event_type in event_type_combo:
-                patterns_in_type = [p.name for p in self.patterns_by_event_type[event_type]]
-                pattern_choices.append(patterns_in_type)
-
-            for pattern_combo in product(*pattern_choices):
-                all_combinations.append(pattern_combo)
-
-        self.logger.info(f"Generated {len(all_combinations)} combinations of size {size} by event type")
-        return all_combinations
-
-    def _generate_combinations_by_market(self, size: int) -> List[Tuple[str]]:
-        """Generate combinations picking one pattern from each market"""
-        all_markets = set()
-        market_to_patterns = defaultdict(list)
-
-        for event_type, markets in self.patterns_by_market.items():
-            for market, patterns in markets.items():
-                all_markets.add(market)
-                for pattern in patterns:
-                    market_to_patterns[market].append(pattern.name)
-
-        if size > len(all_markets):
-            self.logger.warning(f"Requested size {size} exceeds available markets {len(all_markets)}")
-            return []
-
-        all_combinations = []
-
-        for market_combo in combinations(all_markets, size):
-            pattern_choices = []
-            for market in market_combo:
-                patterns_in_market = market_to_patterns[market]
-                pattern_choices.append(patterns_in_market)
-
-            for pattern_combo in product(*pattern_choices):
-                all_combinations.append(pattern_combo)
-
-        self.logger.info(f"Generated {len(all_combinations)} combinations of size {size} by market")
-        return all_combinations
-
-    def _generate_full_combinations(self, size: int) -> List[Tuple[str]]:
-        """Generate all possible combinations without restrictions"""
-        if size > len(self.all_pattern_names):
-            return []
-
-        all_combinations = list(combinations(self.all_pattern_names, size))
-        self.logger.info(f"Generated {len(all_combinations)} full combinations of size {size}")
-        return all_combinations
-
-    def _valid_combination(self, combo: Tuple[str]) -> bool:
-        """Validate combination based on strategy"""
-        if self.combination_strategy == "by_event_type":
-            return self._valid_combination_by_event_type(combo)
-        elif self.combination_strategy == "by_market":
-            return self._valid_combination_by_market(combo)
-        else:  # full
-            return True
-
-    def _valid_combination_by_event_type(self, combo: Tuple[str]) -> bool:
-        """Ensure patterns come from different event types"""
-        event_types_seen = set()
-        for name in combo:
-            pattern = self.pattern_name_to_obj.get(name)
-            if pattern is None:
-                return False
-            if pattern.event_type in event_types_seen:
-                return False
-            event_types_seen.add(pattern.event_type)
-        return True
-
-    def _valid_combination_by_market(self, combo: Tuple[str]) -> bool:
-        """Ensure patterns come from different markets"""
-        markets_seen = set()
-        for name in combo:
-            pattern = self.pattern_name_to_obj.get(name)
-            if pattern is None:
-                return False
-            if pattern.market in markets_seen:
-                return False
-            markets_seen.add(pattern.market)
-        return True
-
-    def _analyze_combination_batch(self, combinations_batch: List[Tuple[str]], match_patterns: Dict[int, Set[str]],
-                                   total_matches: int) -> Dict[str, List]:
-        """Analyze a batch of combinations (for threading)"""
-        batch_results = {
-            'never_occurred': [],
-            'occurred': []
-        }
-
-        for combo in combinations_batch:
-            if not self._valid_combination(combo):
+            if not occurring_patterns:
                 continue
 
-            # Count occurrences for this combination
-            occurred_count = 0
-            for patterns in match_patterns.values():
-                if set(combo).issubset(patterns):
-                    occurred_count += 1
+            # Generate combinations only from patterns that actually occurred
+            for size in range(self.config.MIN_EVENTS_COMBINATION, self.config.MAX_EVENTS_COMBINATION + 1):
+                if len(occurring_patterns) < size:
+                    continue
 
-            pattern_details = [self.pattern_name_to_obj[name] for name in combo]
+                # Generate combinations using the selected strategy
+                combinations_for_match = self._generate_valid_combinations(occurring_patterns, size)
+
+                # Count each combination for this match
+                for combo in combinations_for_match:
+                    batch_combinations[combo] += 1
+
+        return batch_combinations
+
+    def _get_occurring_patterns_for_match(self, match: Match) -> List[str]:
+        """Get list of pattern names that occurred in this specific match"""
+        occurring_patterns = []
+
+        for pattern in self.all_patterns:
+            try:
+                if pattern.condition(match):
+                    occurring_patterns.append(pattern.name)
+            except Exception as e:
+                self.logger.debug(f"Error evaluating pattern {pattern.name} for match {match.id}: {e}")
+                continue
+
+        return occurring_patterns
+
+    def _generate_valid_combinations(self, occurring_patterns: List[str], size: int) -> List[Tuple[str, ...]]:
+        """Generate valid combinations based on strategy from occurring patterns"""
+        if self.combination_strategy == "by_event_type":
+            return self._generate_combinations_by_event_type_from_occurring(occurring_patterns, size)
+        elif self.combination_strategy == "by_market":
+            return self._generate_combinations_by_market_from_occurring(occurring_patterns, size)
+        else:  # full
+            return self._generate_full_combinations_from_occurring(occurring_patterns, size)
+
+    def _generate_combinations_by_event_type_from_occurring(self, occurring_patterns: List[str], size: int) -> List[
+        Tuple[str, ...]]:
+        """Generate combinations by event type from occurring patterns only"""
+        # Group occurring patterns by event type
+        patterns_by_type = defaultdict(list)
+        for pattern_name in occurring_patterns:
+            pattern = self.pattern_name_to_obj.get(pattern_name)
+            if pattern:
+                patterns_by_type[pattern.event_type].append(pattern_name)
+
+        # Get event types that have occurring patterns
+        available_event_types = list(patterns_by_type.keys())
+
+        if size > len(available_event_types):
+            return []
+
+        valid_combinations = []
+
+        # Generate combinations of event types
+        for event_type_combo in combinations(available_event_types, size):
+            # Get patterns for each event type in the combination
+            pattern_choices = [patterns_by_type[event_type] for event_type in event_type_combo]
+
+            # Generate all combinations across the chosen event types
+            for pattern_names in self._product(*pattern_choices):
+                valid_combinations.append(tuple(pattern_names))
+
+        return valid_combinations
+
+    def _generate_combinations_by_market_from_occurring(self, occurring_patterns: List[str], size: int) -> List[
+        Tuple[str, ...]]:
+        """Generate combinations by market from occurring patterns only"""
+        # Group occurring patterns by market
+        patterns_by_market = defaultdict(list)
+        for pattern_name in occurring_patterns:
+            pattern = self.pattern_name_to_obj.get(pattern_name)
+            if pattern:
+                patterns_by_market[pattern.market].append(pattern_name)
+
+        # Get markets that have occurring patterns
+        available_markets = list(patterns_by_market.keys())
+
+        if size > len(available_markets):
+            return []
+
+        valid_combinations = []
+
+        # Generate combinations of markets
+        for market_combo in combinations(available_markets, size):
+            # Get patterns for each market in the combination
+            pattern_choices = [patterns_by_market[market] for market in market_combo]
+
+            # Generate all combinations across the chosen markets
+            for pattern_names in self._product(*pattern_choices):
+                valid_combinations.append(tuple(pattern_names))
+
+        return valid_combinations
+
+    def _generate_full_combinations_from_occurring(self, occurring_patterns: List[str], size: int) -> List[
+        Tuple[str, ...]]:
+        """Generate all combinations from occurring patterns only"""
+        if size > len(occurring_patterns):
+            return []
+
+        return list(combinations(occurring_patterns, size))
+
+    def _product(self, *args):
+        """Custom product function to handle empty lists"""
+        if not args:
+            yield ()
+            return
+
+        first, rest = args[0], args[1:]
+        for item in first:
+            for product_rest in self._product(*rest):
+                yield (item,) + product_rest
+
+    def _prepare_final_results(self, combinations_counter: Counter, total_matches: int,
+                               valid_combinations_count: int) -> Dict[str, Any]:
+        """Prepare final results from the combinations counter"""
+        never_occurred = []
+        occurred = []
+
+        for combo, count in combinations_counter.items():
+            pattern_details = [self.pattern_name_to_obj[name] for name in combo if name in self.pattern_name_to_obj]
+
             result_item = {
                 'events': [{'name': p.name, 'description': p.description,
                             'event_type': p.event_type.value, 'market': p.market}
                            for p in pattern_details],
                 'combination_size': len(combo),
-                'occurrence_count': occurred_count,
-                'percentage': (occurred_count / total_matches) * 100 if total_matches > 0 else 0.0,
+                'occurrence_count': count,
+                'percentage': (count / total_matches) * 100 if total_matches > 0 else 0.0,
                 'strategy': self.combination_strategy
             }
 
-            if occurred_count == 0:
-                batch_results['never_occurred'].append(result_item)
+            if count == 0:
+                never_occurred.append(result_item)
             else:
-                batch_results['occurred'].append(result_item)
+                occurred.append(result_item)
 
-        return batch_results
+        # Sort occurred combinations
+        occurred_sorted = sorted(occurred, key=lambda x: x['occurrence_count'])
 
-    def _analyze_all_combinations_optimized(self, match_patterns: Dict[int, Set[str]], matches: List[Match],
-                                            league_id: int, season: int) -> Dict[str, Any]:
-        """Optimized combination analysis with threading and progress tracking"""
-        total_matches = len(matches)
-        all_never_occurred = []
-        all_occurred = []
-
-        total_combinations_checked = 0
-        valid_combinations_count = 0
-
-        # Analyze all combinations across all sizes
-        for size in range(self.config.MIN_EVENTS_COMBINATION, self.config.MAX_EVENTS_COMBINATION + 1):
-            self.logger.info(f"🔍 Analyzing combinations of size {size} for league {league_id}, season {season}")
-
-            combinations_to_check = self._generate_combinations_by_strategy(size)
-            if not combinations_to_check:
-                continue
-
-            total_combinations_checked += len(combinations_to_check)
-
-            # Check for resume point
-            resume_combo = self.progress_manager.get_resume_point(league_id, season, size)
-            start_index = 0
-
-            if resume_combo:
-                try:
-                    start_index = combinations_to_check.index(resume_combo)
-                    self.logger.info(f"Resuming from combination {resume_combo} at index {start_index}")
-                except ValueError:
-                    self.logger.info("Resume combination not found, starting from beginning")
-
-            # Process combinations in batches for threading
-            batch_size = max(1, len(combinations_to_check) // (self.thread_count * 10))
-
-            for batch_start in range(start_index, len(combinations_to_check), batch_size):
-                batch_end = min(batch_start + batch_size, len(combinations_to_check))
-                batch = combinations_to_check[batch_start:batch_end]
-
-                # Split batch for threading
-                sub_batches = [batch[i:i + max(1, len(batch) // self.thread_count)]
-                               for i in range(0, len(batch), max(1, len(batch) // self.thread_count))]
-
-                with concurrent.futures.ThreadPoolExecutor(max_workers=self.thread_count) as executor:
-                    future_to_batch = {
-                        executor.submit(self._analyze_combination_batch, sub_batch, match_patterns,
-                                        total_matches): sub_batch
-                        for sub_batch in sub_batches if sub_batch
-                    }
-
-                    for future in concurrent.futures.as_completed(future_to_batch):
-                        try:
-                            batch_result = future.result()
-                            all_never_occurred.extend(batch_result['never_occurred'])
-                            all_occurred.extend(batch_result['occurred'])
-                            valid_combinations_count += len(batch_result['never_occurred']) + len(
-                                batch_result['occurred'])
-
-                        except Exception as e:
-                            self.logger.error(f"Error processing batch: {e}")
-
-                # Save progress after each batch
-                if batch_end < len(combinations_to_check):
-                    next_combo = combinations_to_check[batch_end] if batch_end < len(combinations_to_check) else batch[
-                        -1]
-                    self.progress_manager.save_progress(
-                        league_id, season, size, next_combo,
-                        len(combinations_to_check), batch_end
-                    )
-
-        # Sort occurred combinations by count
-        all_occurred_sorted = sorted(all_occurred, key=lambda x: x['occurrence_count'])
-
-        # Prepare statistics
         stats = {
-            'total_combinations_checked': total_combinations_checked,
+            'total_combinations_checked': len(combinations_counter),
             'valid_combinations_count': valid_combinations_count,
-            'never_occurred_count': len(all_never_occurred),
-            'occurred_count': len(all_occurred),
-            'min_occurrence': min([x['occurrence_count'] for x in all_occurred]) if all_occurred else 0,
-            'max_occurrence': max([x['occurrence_count'] for x in all_occurred]) if all_occurred else 0,
-            'avg_occurrence': sum([x['occurrence_count'] for x in all_occurred]) / len(
-                all_occurred) if all_occurred else 0
+            'never_occurred_count': len(never_occurred),
+            'occurred_count': len(occurred),
+            'min_occurrence': min([x['occurrence_count'] for x in occurred]) if occurred else 0,
+            'max_occurrence': max([x['occurrence_count'] for x in occurred]) if occurred else 0,
+            'avg_occurrence': sum([x['occurrence_count'] for x in occurred]) / len(occurred) if occurred else 0
         }
 
-        self.logger.info(f"Analysis complete: {stats}")
-
         return {
-            'never_occurred': all_never_occurred[:self.config.MAX_RESULTS_PER_CATEGORY],
-            'least_occurred': all_occurred_sorted[:self.config.MAX_RESULTS_PER_CATEGORY],
-            'most_occurred': list(reversed(all_occurred_sorted[-self.config.MAX_RESULTS_PER_CATEGORY:])),
+            'never_occurred': never_occurred[:self.config.MAX_RESULTS_PER_CATEGORY],
+            'least_occurred': occurred_sorted[:self.config.MAX_RESULTS_PER_CATEGORY],
+            'most_occurred': list(reversed(occurred_sorted[-self.config.MAX_RESULTS_PER_CATEGORY:])),
             'stats': stats
         }

@@ -5,7 +5,7 @@ from datetime import datetime
 import logging
 from config.settings import APIConfig
 from data.models import Match, MatchEvent, EventType, TeamStats, HalfStats
-from utils.cache_manager import UnifiedCacheManager
+from utils.cache_manager import OrganizedCacheManager
 
 
 class APIFootballClient:
@@ -18,11 +18,8 @@ class APIFootballClient:
         })
         self.logger = logging.getLogger(__name__)
         self.last_request_time = 0
-        # Use unified cache manager
-        self.cache = UnifiedCacheManager(cache_dir="api_cache", ttl=config.CACHE_TTL)
-
-        # Clear expired cache on initialization
-        self.cache.clear_expired()
+        # Use organized cache manager
+        self.cache = OrganizedCacheManager(cache_dir="api_cache", ttl=config.CACHE_TTL)
 
     def _rate_limit(self):
         """Implement rate limiting"""
@@ -35,13 +32,7 @@ class APIFootballClient:
         self.last_request_time = time.time()
 
     def _make_request(self, endpoint: str, params: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        """Make API request with error handling and caching"""
-        # Try to get from cache first
-        cached_response = self.cache.get_api_response(endpoint, params)  # FIXED: Changed to get_api_response
-        if cached_response is not None:
-            return cached_response
-
-        # If not in cache, make API request
+        """Make API request with error handling"""
         self._rate_limit()
 
         try:
@@ -49,10 +40,6 @@ class APIFootballClient:
             response = self.session.get(url, params=params, timeout=self.config.TIMEOUT)
             response.raise_for_status()
             api_response = response.json()
-
-            # Cache the successful response
-            self.cache.set_api_response(endpoint, params, api_response)  # FIXED: Changed to set_api_response
-
             return api_response
 
         except requests.exceptions.RequestException as e:
@@ -62,6 +49,11 @@ class APIFootballClient:
     def get_leagues(self) -> List[Dict[str, Any]]:
         """Get available leagues"""
         response = self._make_request("leagues", {"current": "true"})
+        if response:
+            # Save league info to organized cache
+            for league_info in response.get("response", []):
+                league_id = league_info["league"]["id"]
+                self.cache.save_league_info(league_id, league_info)
         return response.get("response", []) if response else []
 
     def get_matches(self, league_id: int, season: int, round: Optional[str] = None) -> List[Dict[str, Any]]:
@@ -70,41 +62,66 @@ class APIFootballClient:
         if round:
             params['round'] = round
 
+        # Check if we have cached matches
+        cached_matches = self.cache.get_league_matches(league_id, season)
+        if cached_matches:
+            self.logger.info(f"Using cached matches for league {league_id}, season {season}")
+            return [match_data['fixture_data'] for match_data in cached_matches.values()]
+
+        # If not in cache, make API request
         response = self._make_request("fixtures", params)
-        return response.get("response", []) if response else []
+        if response:
+            matches_data = response.get("response", [])
+            # Save matches to organized cache
+            self.cache.save_matches(league_id, season, matches_data)
+            return matches_data
+        return []
 
-    def get_match_events(self, match_id: int) -> List[Dict[str, Any]]:
+    def get_match_events(self, match_id: int, league_id: int, season: int) -> List[Dict[str, Any]]:
         """Get events for a specific match - check cache first"""
-        # First check if we have processed match data
-        cached_match = self.cache.get_match_data(match_id)
-        if cached_match and 'events' in cached_match:
-            return cached_match['events']
-
-        # If not, check API cache for raw events
-        params = {'fixture': match_id}
-        cached_response = self.cache.get_api_response("fixtures/events", params)
-        if cached_response:
-            return cached_response.get("response", [])
+        # Check if we have processed match data in organized cache
+        match_details = self.cache.get_match_details(league_id, season, match_id)
+        if match_details and 'events' in match_details:
+            return match_details['events']
 
         # If not in cache, make API request
+        params = {'fixture': match_id}
         response = self._make_request("fixtures/events", params)
-        return response.get("response", []) if response else []
+        events_data = response.get("response", []) if response else []
 
-    def get_match_statistics(self, match_id: int) -> List[Dict[str, Any]]:
+        # Save events to organized cache
+        if events_data:
+            # Get existing statistics or empty list
+            existing_stats = []
+            if match_details and 'statistics' in match_details:
+                existing_stats = match_details['statistics']
+
+            self.cache.save_match_details(league_id, season, match_id, events_data, existing_stats)
+
+        return events_data
+
+    def get_match_statistics(self, match_id: int, league_id: int, season: int) -> List[Dict[str, Any]]:
         """Get statistics for a specific match - check cache first"""
-        cached_match = self.cache.get_match_data(match_id)
-        if cached_match and 'statistics' in cached_match:  # FIXED: Removed ['data']
-            return cached_match['statistics']  # FIXED: Removed ['data']
-
-        # Also check API cache for raw statistics
-        params = {'fixture': match_id}
-        cached_response = self.cache.get_api_response("fixtures/statistics", params)
-        if cached_response:
-            return cached_response.get("response", [])
+        # Check if we have processed match data in organized cache
+        match_details = self.cache.get_match_details(league_id, season, match_id)
+        if match_details and 'statistics' in match_details:
+            return match_details['statistics']
 
         # If not in cache, make API request
+        params = {'fixture': match_id}
         response = self._make_request("fixtures/statistics", params)
-        return response.get("response", []) if response else []
+        stats_data = response.get("response", []) if response else []
+
+        # Save statistics to organized cache
+        if stats_data:
+            # Get existing events or empty list
+            existing_events = []
+            if match_details and 'events' in match_details:
+                existing_events = match_details['events']
+
+            self.cache.save_match_details(league_id, season, match_id, existing_events, stats_data)
+
+        return stats_data
 
     def get_match_lineups(self, match_id: int) -> List[Dict[str, Any]]:
         """Get lineups for a specific match"""
@@ -145,19 +162,22 @@ class APIFootballClient:
 
     def _enrich_match_data(self, match: Match):
         """Enrich match data with events, statistics, and detailed info"""
-        # Check if we have complete cached match data
-        cached_match = self.cache.get_match_data(match.id)
-        if cached_match and cached_match.get('complete'):
-            # Load from cache
-            self._load_match_from_cache(match, cached_match)
+        # Check if we have complete cached match data in organized cache
+        match_details = self.cache.get_match_details(match.league_id, match.season, match.id)
+        if match_details and match_details.get('has_details'):  # Changed from 'processed' to 'has_details'
+            # Load from organized cache
+            self.logger.info(f"📦 Loading match {match.id} from cache")
+            self._load_match_from_organized_cache(match, match_details)
             return
 
-        # Get match events
-        events_data = self.get_match_events(match.id)
+        self.logger.info(f"🔄 Fetching details for match {match.id} from API")
+
+        # Get match events using organized cache
+        events_data = self.get_match_events(match.id, match.league_id, match.season)
         self._process_events(match, events_data)
 
-        # Get match statistics
-        stats_data = self.get_match_statistics(match.id)
+        # Get match statistics using organized cache
+        stats_data = self.get_match_statistics(match.id, match.league_id, match.season)
         self._process_statistics(match, stats_data)
 
         # Extract half-time statistics from events
@@ -166,38 +186,86 @@ class APIFootballClient:
         # Generate derived events for pattern analysis
         self._generate_derived_events(match)
 
-        # Cache the complete match data
-        self._cache_complete_match(match)
-
-    def _load_match_from_cache(self, match: Match, cached_data: Dict[str, Any]):
-        """Load match data from cache with proper parameter handling"""
+    def _load_match_from_organized_cache(self, match: Match, match_details: Dict[str, Any]):
+        """Load match data from organized cache"""
         match.events = []
-        for event_dict in cached_data.get('events', []):
+        for event_dict in match_details.get('events', []):
             try:
+                # Filter out parameters that MatchEvent doesn't accept
+                valid_params = ['event_type', 'type', 'value', 'team', 'minute', 'is_home', 'description']
+                filtered_event_dict = {k: v for k, v in event_dict.items() if k in valid_params}
+
                 # Handle both 'type' and 'event_type' parameter names
-                if 'type' in event_dict and 'event_type' not in event_dict:
-                    event_dict = event_dict.copy()
-                    event_dict['event_type'] = event_dict.pop('type')
+                if 'type' in filtered_event_dict and 'event_type' not in filtered_event_dict:
+                    filtered_event_dict = filtered_event_dict.copy()
+                    filtered_event_dict['event_type'] = filtered_event_dict.pop('type')
 
                 # Convert string event_type back to EventType enum
-                if isinstance(event_dict.get('event_type'), str):
-                    event_dict['event_type'] = EventType(event_dict['event_type'])
+                if isinstance(filtered_event_dict.get('event_type'), str):
+                    # Map API event types to EventType enum values
+                    event_type_str = filtered_event_dict['event_type'].lower()
+                    event_type_mapping = {
+                        'goal': EventType.GOALS,
+                        'card': EventType.CARDS,
+                        'yellow card': EventType.CARDS,
+                        'red card': EventType.CARDS,
+                        'corner': EventType.CORNERS,
+                        'subst': EventType.TEAM_STATS,
+                        'var': EventType.TEAM_STATS,
+                        'foul': EventType.FOULS,
+                        'offside': EventType.OFFSIDES,
+                        'half_stats': EventType.HALF_STATS,
+                        'goals': EventType.GOALS,
+                        'cards': EventType.CARDS,
+                        'corners': EventType.CORNERS,
+                        'team_stats': EventType.TEAM_STATS,
+                        'fouls': EventType.FOULS,
+                        'offsides': EventType.OFFSIDES
+                    }
 
-                event = MatchEvent(**event_dict)
+                    if event_type_str in event_type_mapping:
+                        filtered_event_dict['event_type'] = event_type_mapping[event_type_str]
+                    else:
+                        # Default to TEAM_STATS for unknown event types
+                        filtered_event_dict['event_type'] = EventType.TEAM_STATS
+                        self.logger.warning(
+                            f"Unknown event type '{filtered_event_dict['event_type']}', defaulting to TEAM_STATS")
+
+                # Extract minute from 'time' field if it exists in original data
+                if 'minute' not in filtered_event_dict and 'time' in event_dict:
+                    time_data = event_dict.get('time', {})
+                    if 'elapsed' in time_data:
+                        filtered_event_dict['minute'] = time_data['elapsed']
+
+                # Ensure required 'value' parameter exists (default to 1 if missing)
+                if 'value' not in filtered_event_dict:
+                    filtered_event_dict['value'] = 1  # Default value for events
+
+                # Ensure required parameters exist
+                required_params = ['event_type', 'value']
+                for param in required_params:
+                    if param not in filtered_event_dict:
+                        self.logger.warning(f"Missing required parameter '{param}' in event, using default")
+                        if param == 'value':
+                            filtered_event_dict[param] = 1
+                        elif param == 'event_type':
+                            filtered_event_dict[param] = EventType.TEAM_STATS
+
+                event = MatchEvent(**filtered_event_dict)
                 match.events.append(event)
             except Exception as e:
                 self.logger.warning(f"Failed to load event from cache: {e}")
                 continue
 
-        # Rest of the loading code for stats...
-        if cached_data.get('home_stats'):
-            match.home_stats = TeamStats(**cached_data['home_stats'])
-        if cached_data.get('away_stats'):
-            match.away_stats = TeamStats(**cached_data['away_stats'])
-        if cached_data.get('first_half'):
-            match.first_half = HalfStats(**cached_data['first_half'])
-        if cached_data.get('second_half'):
-            match.second_half = HalfStats(**cached_data['second_half'])
+        # Process statistics from cache
+        stats_data = match_details.get('statistics', [])
+        self._process_statistics(match, stats_data)
+
+        # Extract half stats from events
+        self._extract_half_stats(match, match_details.get('events', []))
+
+        # Generate derived events
+        self._generate_derived_events(match)
 
     def _cache_complete_match(self, match: Match):
         """Cache complete match data for future use"""
@@ -241,20 +309,22 @@ class APIFootballClient:
         event_type = event_data.get('type')
         detail = event_data.get('detail')
 
-        if event_type in ['Goal', 'Penalty', 'Missed Penalty']:
-            return EventType.GOALS
-        elif event_type in ['Card', 'Yellow Card', 'Red Card']:
-            return EventType.CARDS
-        elif event_type == 'Corner':
-            return EventType.CORNERS
-        elif event_type == 'Subst':
-            return EventType.TEAM_STATS
-        elif event_type == 'Var':
-            return EventType.TEAM_STATS
-        elif event_type == 'Foul':
-            return EventType.FOULS
-        elif event_type == 'Offside':
-            return EventType.OFFSIDES
+        event_type_mapping = {
+            'goal': EventType.GOALS,
+            'penalty': EventType.GOALS,
+            'missed penalty': EventType.GOALS,
+            'card': EventType.CARDS,
+            'yellow card': EventType.CARDS,
+            'red card': EventType.CARDS,
+            'corner': EventType.CORNERS,
+            'subst': EventType.TEAM_STATS,
+            'var': EventType.TEAM_STATS,
+            'foul': EventType.FOULS,
+            'offside': EventType.OFFSIDES
+        }
+
+        if event_type and event_type.lower() in event_type_mapping:
+            return event_type_mapping[event_type.lower()]
 
         return None
 

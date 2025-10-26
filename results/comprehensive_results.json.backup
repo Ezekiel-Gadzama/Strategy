@@ -1,0 +1,27 @@
+{
+  "leagues": {
+    "398": {
+      "name": "Premier League",
+      "seasons": {
+        "2022": {
+          "total_matches_processed": 10,
+          "combos": {},
+          "analysis_results": {},
+          "current_progress": {
+            "combination_size": null,
+            "current_combination": null,
+            "processed_count": 0,
+            "total_combinations": 0,
+            "last_updated": "2025-10-26T23:50:07.616035"
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "created_at": "2025-10-26T23:50:07.053709",
+    "last_updated": "2025-10-26T23:50:07.616048",
+    "total_leagues": 1,
+    "total_seasons": 1
+  }
+}

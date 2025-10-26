@@ -25,7 +25,7 @@ class AnalysisConfig:
     ])
     SEASON: List[int] = field(default_factory=lambda: [2022, 2023, 2024])
     PAST_YEARS: int = 1
-    THREAD_COUNT: int = 3  # Number of threads for parallel processing
+    THREAD_COUNT: int = 1  # Number of threads for parallel processing
 
 
 @dataclass
