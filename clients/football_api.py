@@ -5,7 +5,7 @@ from datetime import datetime
 import logging
 from config.settings import APIConfig
 from data.models import Match, MatchEvent, EventType, TeamStats, HalfStats
-from utils.cache_manager import CacheManager
+from utils.cache_manager import UnifiedCacheManager
 
 
 class APIFootballClient:
@@ -18,7 +18,8 @@ class APIFootballClient:
         })
         self.logger = logging.getLogger(__name__)
         self.last_request_time = 0
-        self.cache = CacheManager(cache_dir="api_cache", ttl=config.CACHE_TTL if hasattr(config, 'CACHE_TTL') else 3600)
+        # Use unified cache manager
+        self.cache = UnifiedCacheManager(cache_dir="api_cache", ttl=config.CACHE_TTL)
 
         # Clear expired cache on initialization
         self.cache.clear_expired()
@@ -36,7 +37,7 @@ class APIFootballClient:
     def _make_request(self, endpoint: str, params: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """Make API request with error handling and caching"""
         # Try to get from cache first
-        cached_response = self.cache.get(endpoint, params)
+        cached_response = self.cache.get_api_response(endpoint, params)  # FIXED: Changed to get_api_response
         if cached_response is not None:
             return cached_response
 
@@ -50,7 +51,7 @@ class APIFootballClient:
             api_response = response.json()
 
             # Cache the successful response
-            self.cache.set(endpoint, params, api_response)
+            self.cache.set_api_response(endpoint, params, api_response)  # FIXED: Changed to set_api_response
 
             return api_response
 
@@ -73,14 +74,35 @@ class APIFootballClient:
         return response.get("response", []) if response else []
 
     def get_match_events(self, match_id: int) -> List[Dict[str, Any]]:
-        """Get events for a specific match"""
+        """Get events for a specific match - check cache first"""
+        # First check if we have processed match data
+        cached_match = self.cache.get_match_data(match_id)
+        if cached_match and 'events' in cached_match:
+            return cached_match['events']
+
+        # If not, check API cache for raw events
         params = {'fixture': match_id}
+        cached_response = self.cache.get_api_response("fixtures/events", params)
+        if cached_response:
+            return cached_response.get("response", [])
+
+        # If not in cache, make API request
         response = self._make_request("fixtures/events", params)
         return response.get("response", []) if response else []
 
     def get_match_statistics(self, match_id: int) -> List[Dict[str, Any]]:
-        """Get statistics for a specific match"""
+        """Get statistics for a specific match - check cache first"""
+        cached_match = self.cache.get_match_data(match_id)
+        if cached_match and 'statistics' in cached_match:  # FIXED: Removed ['data']
+            return cached_match['statistics']  # FIXED: Removed ['data']
+
+        # Also check API cache for raw statistics
         params = {'fixture': match_id}
+        cached_response = self.cache.get_api_response("fixtures/statistics", params)
+        if cached_response:
+            return cached_response.get("response", [])
+
+        # If not in cache, make API request
         response = self._make_request("fixtures/statistics", params)
         return response.get("response", []) if response else []
 
@@ -123,6 +145,13 @@ class APIFootballClient:
 
     def _enrich_match_data(self, match: Match):
         """Enrich match data with events, statistics, and detailed info"""
+        # Check if we have complete cached match data
+        cached_match = self.cache.get_match_data(match.id)
+        if cached_match and cached_match.get('complete'):
+            # Load from cache
+            self._load_match_from_cache(match, cached_match)
+            return
+
         # Get match events
         events_data = self.get_match_events(match.id)
         self._process_events(match, events_data)
@@ -136,6 +165,59 @@ class APIFootballClient:
 
         # Generate derived events for pattern analysis
         self._generate_derived_events(match)
+
+        # Cache the complete match data
+        self._cache_complete_match(match)
+
+    def _load_match_from_cache(self, match: Match, cached_data: Dict[str, Any]):
+        """Load match data from cache with proper parameter handling"""
+        match.events = []
+        for event_dict in cached_data.get('events', []):
+            try:
+                # Handle both 'type' and 'event_type' parameter names
+                if 'type' in event_dict and 'event_type' not in event_dict:
+                    event_dict = event_dict.copy()
+                    event_dict['event_type'] = event_dict.pop('type')
+
+                # Convert string event_type back to EventType enum
+                if isinstance(event_dict.get('event_type'), str):
+                    event_dict['event_type'] = EventType(event_dict['event_type'])
+
+                event = MatchEvent(**event_dict)
+                match.events.append(event)
+            except Exception as e:
+                self.logger.warning(f"Failed to load event from cache: {e}")
+                continue
+
+        # Rest of the loading code for stats...
+        if cached_data.get('home_stats'):
+            match.home_stats = TeamStats(**cached_data['home_stats'])
+        if cached_data.get('away_stats'):
+            match.away_stats = TeamStats(**cached_data['away_stats'])
+        if cached_data.get('first_half'):
+            match.first_half = HalfStats(**cached_data['first_half'])
+        if cached_data.get('second_half'):
+            match.second_half = HalfStats(**cached_data['second_half'])
+
+    def _cache_complete_match(self, match: Match):
+        """Cache complete match data for future use"""
+        match_data = {
+            'complete': True,
+            'events': [event.to_dict() for event in match.events],
+            'home_stats': match.home_stats.__dict__ if match.home_stats else None,
+            'away_stats': match.away_stats.__dict__ if match.away_stats else None,
+            'first_half': match.first_half.__dict__,
+            'second_half': match.second_half.__dict__,
+            'basic_info': {
+                'league': match.league,
+                'season': match.season,
+                'home_team': match.home_team,
+                'away_team': match.away_team,
+                'score_home': match.score_home,
+                'score_away': match.score_away
+            }
+        }
+        self.cache.set_match_data(match.id, match_data)
 
     def _process_events(self, match: Match, events_data: List[Dict[str, Any]]):
         """Process match events"""

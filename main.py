@@ -1,8 +1,9 @@
 import logging
+import time
+from datetime import timedelta
 from datetime import datetime
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 import json
-import os
 
 from config.settings import Config
 from clients.football_api import APIFootballClient
@@ -19,75 +20,7 @@ class FootballDataAnalyzer:
         self.api_client = APIFootballClient(config.api)
         self.pattern_analyzer = PatternAnalyzer(config.analysis)
 
-        # Initialize match cache
-        self.match_cache_dir = "match_cache"
-        self._ensure_match_cache_dir()
-
-    def _ensure_match_cache_dir(self):
-        """Create match cache directory if it doesn't exist"""
-        if not os.path.exists(self.match_cache_dir):
-            os.makedirs(self.match_cache_dir)
-
-    def _get_match_cache_file(self, league_id: int, season: int) -> str:
-        """Get cache file path for league and season"""
-        return os.path.join(self.match_cache_dir, f"matches_{league_id}_{season}.json")
-
-    def _load_cached_matches(self, league_id: int, season: int) -> Optional[List[Match]]:
-        """Load matches from cache"""
-        cache_file = self._get_match_cache_file(league_id, season)
-
-        if not os.path.exists(cache_file):
-            return None
-
-        try:
-            with open(cache_file, 'r', encoding='utf-8') as f:
-                cached_data = json.load(f)
-
-            # Check if cache is expired (1 day TTL for match data)
-            cache_time = datetime.fromisoformat(cached_data['timestamp'])
-            current_time = datetime.now()
-            time_diff = (current_time - cache_time).total_seconds()
-
-            if time_diff > 86400:  # 24 hours
-                self.logger.debug(f"Match cache expired for league {league_id}, season {season}")
-                return None
-
-            matches = []
-            for match_data in cached_data['matches']:
-                # Reconstruct Match objects from cached data
-                match = Match(**match_data)
-                matches.append(match)
-
-            self.logger.info(f"Loaded {len(matches)} matches from cache for league {league_id}")
-            return matches
-
-        except (json.JSONDecodeError, KeyError, ValueError, TypeError) as e:
-            self.logger.warning(f"Invalid match cache file {cache_file}: {e}")
-            try:
-                os.remove(cache_file)
-            except OSError:
-                pass
-            return None
-
-    def _save_matches_to_cache(self, league_id: int, season: int, matches: List[Match]):
-        """Save matches to cache"""
-        cache_file = self._get_match_cache_file(league_id, season)
-
-        try:
-            cache_data = {
-                'timestamp': datetime.now().isoformat(),
-                'league_id': league_id,
-                'season': season,
-                'matches': [match.to_dict() for match in matches]
-            }
-
-            with open(cache_file, 'w', encoding='utf-8') as f:
-                json.dump(cache_data, f, indent=2, ensure_ascii=False, default=str)
-
-            self.logger.debug(f"Cached {len(matches)} matches for league {league_id}, season {season}")
-
-        except Exception as e:
-            self.logger.error(f"Failed to cache matches: {e}")
+        # REMOVED: Old cache initialization - using unified cache in APIFootballClient
 
     def run_analysis(self) -> Dict[str, Any]:
         """Main analysis workflow"""
@@ -106,8 +39,8 @@ class FootballDataAnalyzer:
         return results
 
     def _get_sample_matches(self) -> List[Match]:
-        """Fetch recent football matches from the API for analysis"""
-        self.logger.info("Fetching sample football matches from API...")
+        """Fetch football matches from the API for analysis with multiple seasons"""
+        self.logger.info("Fetching football matches from API...")
 
         matches: List[Match] = []
         leagues_response = self.api_client.get_leagues()
@@ -126,41 +59,51 @@ class FootballDataAnalyzer:
             self.logger.warning("No configured leagues found in API response.")
             return []
 
-        # Limit sample to avoid API quota exhaustion
-        for league_name, league_id in list(league_name_to_id.items())[:1]:
-            self.logger.info(f"Fetching matches for league: {league_name}")
+        # Convert dict_items to list for slicing
+        league_items = list(league_name_to_id.items())
 
-            # Try to load from cache first
-            cached_matches = self._load_cached_matches(league_id, self.config.analysis.SEASON)
-            if cached_matches:
-                matches.extend(cached_matches)
-                continue
+        # Process each league and season
+        for league_name, league_id in league_items[:2]:  # Limit to 2 leagues for testing
+            for season in self.config.analysis.SEASON[:1]:  # Limit to 1 season for testing
+                self.logger.info(f"📊 Fetching matches for {league_name} ({season})...")
 
-            # If not in cache, fetch from API
-            fixtures_response = self.api_client.get_matches(
-                league_id=league_id,
-                season=self.config.analysis.SEASON
-            )
+                # STEP 1: Get fixtures list for this league+season
+                fixtures_response = self.api_client.get_matches(
+                    league_id=league_id,
+                    season=season
+                )
 
-            if not fixtures_response:
-                self.logger.warning(f"No fixtures returned for league {league_name}")
-                continue
+                if not fixtures_response:
+                    self.logger.warning(f"No fixtures returned for {league_name}, season {season}")
+                    continue
 
-            league_matches = []
-            # Take up to 10 matches per league for sampling
-            for fixture_data in fixtures_response[:10]:
-                try:
-                    match = self.api_client.parse_match_data(fixture_data)
-                    league_matches.append(match)
-                except Exception as e:
-                    self.logger.error(f"Failed to parse match data: {e}")
+                self.logger.info(f"📥 Found {len(fixtures_response)} fixtures for {league_name}")
 
-            # Cache the fetched matches
-            if league_matches:
-                self._save_matches_to_cache(league_id, self.config.analysis.SEASON, league_matches)
+                league_matches = []
+                processed_count = 0
+
+                # STEP 2: Process each fixture into detailed Match objects
+                for fixture_data in fixtures_response[:2]:  # Limit to 5 matches for testing
+                    try:
+                        self.logger.info(f"🔄 Processing match {fixture_data['fixture']['id']}: "
+                                         f"{fixture_data['teams']['home']['name']} vs "
+                                         f"{fixture_data['teams']['away']['name']}")
+
+                        match = self.api_client.parse_match_data(fixture_data)
+                        league_matches.append(match)
+                        processed_count += 1
+
+                        self.logger.info(f"✅ Processed match {match.id}: {match.home_team} vs {match.away_team}")
+
+                    except Exception as e:
+                        self.logger.error(f"❌ Failed to parse match data: {e}")
+                        continue
+
+                self.logger.info(
+                    f"🎯 Successfully processed {processed_count} matches for {league_name}")
                 matches.extend(league_matches)
 
-        self.logger.info(f"Fetched {len(matches)} matches for analysis.")
+        self.logger.info(f"📈 Total matches fetched for analysis: {len(matches)}")
         return matches
 
     def _print_results(self, results: Dict[str, Any]):
@@ -172,27 +115,112 @@ class FootballDataAnalyzer:
             print(f"\n### {league.upper()} ###")
             print(f"Matches analyzed: {league_data['total_matches']}")
             print(f"Patterns analyzed: {league_data['total_patterns_analyzed']}")
+            print(f"Combination strategy: {league_data['combination_strategy']}")
 
-            for category in ['never_occurred', 'least_occurred', 'most_occurred']:
-                print("\n" + "-" * 40)
-                print(f"{category.replace('_', ' ').upper()} (Top 5)")
-                print("-" * 40)
+            # Print statistics if available
+            if 'stats' in league_data:
+                stats = league_data['stats']
+                print(f"\n📊 ANALYSIS STATISTICS:")
+                print(f"   Total combinations checked: {stats['total_combinations_checked']:,}")
+                print(f"   Valid combinations: {stats['valid_combinations_count']:,}")
+                print(f"   Never occurred: {stats['never_occurred_count']:,}")
+                print(f"   Occurred at least once: {stats['occurred_count']:,}")
+                if stats['occurred_count'] > 0:
+                    print(f"   Occurrence range: {stats['min_occurrence']} - {stats['max_occurrence']}")
+                    print(f"   Average occurrence: {stats['avg_occurrence']:.2f}")
 
-                for i, combo in enumerate(league_data[category][:5], 1):
+            # Never Occurred Combinations
+            print("\n" + "🔍 " + "-" * 38)
+            print("NEVER OCCURRED COMBINATIONS")
+            print("-" * 40)
+
+            never_occurred = league_data['never_occurred']
+            if never_occurred:
+                for i, combo in enumerate(never_occurred[:5], 1):
                     print(f"\n{i}. Combination of {combo['combination_size']} events:")
                     for event in combo['events']:
-                        print(f"   - {event['description']}")
-                    print(f"   Occurrences: {combo['occurrence_count']} ({combo['percentage']:.4f}%)")
+                        event_type = event.get('event_type', 'Unknown')
+                        market = event.get('market', 'Unknown')
+                        print(f"   📍 {event['description']}")
+                        print(f"     Type: {event_type}, Market: {market}")
+                    print(f"   ❌ Occurrences: {combo['occurrence_count']} ({combo['percentage']:.4f}%)")
+            else:
+                print("   No never-occurred combinations found.")
+
+            # Least Occurred Combinations (occurred at least once)
+            print("\n" + "📉 " + "-" * 38)
+            print("LEAST OCCURRED COMBINATIONS")
+            print("-" * 40)
+
+            least_occurred = league_data['least_occurred']
+            if least_occurred:
+                for i, combo in enumerate(least_occurred[:5], 1):
+                    print(f"\n{i}. Combination of {combo['combination_size']} events:")
+                    for event in combo['events']:
+                        event_type = event.get('event_type', 'Unknown')
+                        market = event.get('market', 'Unknown')
+                        print(f"   📍 {event['description']}")
+                        print(f"     Type: {event_type}, Market: {market}")
+                    print(f"   📊 Occurrences: {combo['occurrence_count']} ({combo['percentage']:.4f}%)")
+            else:
+                print("   No least-occurred combinations found.")
+
+            # Most Occurred Combinations
+            print("\n" + "📈 " + "-" * 38)
+            print("MOST OCCURRED COMBINATIONS")
+            print("-" * 40)
+
+            most_occurred = league_data['most_occurred']
+            if most_occurred:
+                for i, combo in enumerate(most_occurred[:5], 1):
+                    print(f"\n{i}. Combination of {combo['combination_size']} events:")
+                    for event in combo['events']:
+                        event_type = event.get('event_type', 'Unknown')
+                        market = event.get('market', 'Unknown')
+                        print(f"   📍 {event['description']}")
+                        print(f"     Type: {event_type}, Market: {market}")
+                    print(f"   🎯 Occurrences: {combo['occurrence_count']} ({combo['percentage']:.4f}%)")
+            else:
+                print("   No most-occurred combinations found.")
+
+            # Summary
+            print("\n" + "📋 " + "-" * 38)
+            print("SUMMARY")
+            print("-" * 40)
+            print(f"Never occurred: {len(never_occurred)} combinations")
+            print(f"Least occurred: {len(least_occurred)} combinations")
+            print(f"Most occurred: {len(most_occurred)} combinations")
+
+            # Calculate some insights
+            total_combinations = len(never_occurred) + len(least_occurred) + len(most_occurred)
+            if total_combinations > 0:
+                never_percentage = (len(never_occurred) / total_combinations) * 100
+                print(f"Never occurred ratio: {never_percentage:.1f}%")
+
+            # Find the most interesting patterns (very rare but occurred)
+            if least_occurred:
+                rarest = least_occurred[0]
+                print(f"\n🎲 Rarest occurred pattern: {rarest['occurrence_count']} occurrence(s)")
+
+            if most_occurred:
+                most_common = most_occurred[0]
+                print(f"🏆 Most common pattern: {most_common['occurrence_count']} occurrence(s)")
+
+            print("\n" + "=" * 80)
 
 
 def main():
     """Main entry point"""
+    start_time = time.time()
     config = Config()
     analyzer = FootballDataAnalyzer(config)
 
     try:
         results = analyzer.run_analysis()
-        print("\nAnalysis completed successfully!")
+        end_time = time.time()
+        execution_time = end_time - start_time
+        print(f"\n✅ Analysis completed successfully!")
+        print(f"⏱️  Execution time: {execution_time:.2f} seconds ({timedelta(seconds=int(execution_time))})")
     except Exception as e:
         logging.error(f"Analysis failed: {e}")
         raise

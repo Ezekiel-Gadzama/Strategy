@@ -26,9 +26,31 @@ class MatchEvent:
     is_home: Optional[bool] = None
     description: Optional[str] = None
 
+    def __post_init__(self):
+        """Handle both 'type' and 'event_type' parameter names for backward compatibility"""
+        pass
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'MatchEvent':
+        """Create MatchEvent from dictionary (handles both old and new parameter names)"""
+        # Handle both 'type' and 'event_type' for backward compatibility
+        if 'type' in data and 'event_type' not in data:
+            data = data.copy()
+            data['event_type'] = data.pop('type')
+
+        # Convert string event_type back to EventType enum if needed
+        if isinstance(data.get('event_type'), str):
+            try:
+                data['event_type'] = EventType(data['event_type'])
+            except ValueError:
+                # Handle unknown event types gracefully
+                data['event_type'] = EventType.TEAM_STATS  # default
+
+        return cls(**data)
+
     def to_dict(self) -> Dict[str, Any]:
         return {
-            'type': self.event_type.value,
+            'event_type': self.event_type.value,  # Save as string for JSON
             'value': self.value,
             'team': self.team,
             'minute': self.minute,
