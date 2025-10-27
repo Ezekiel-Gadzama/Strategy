@@ -271,276 +271,276 @@ class EventPatterns:
                            lambda m: (m.score_home + m.score_away) >= 7),
             EventCondition("multigoals_no_goal", "Multigoals: No goal", "multigoals", EventType.GOALS,
                            lambda m: (m.score_home + m.score_away) == 0),
-
-            # =============================================================
-            # --- MATCH RESULT MARKETS ---
-            # =============================================================
-
-            # --- 1x2 ---
-            EventCondition("home_win", "Home team wins", "1x2", EventType.TEAM_STATS,
-                           lambda m: m.score_home > m.score_away),
-            EventCondition("draw", "Match ends in draw", "1x2", EventType.TEAM_STATS,
-                           lambda m: m.score_home == m.score_away),
-            EventCondition("away_win", "Away team wins", "1x2", EventType.TEAM_STATS,
-                           lambda m: m.score_away > m.score_home),
-
-            # --- double_chance ---
-            EventCondition("home_or_draw", "Home win or draw", "double_chance", EventType.TEAM_STATS,
-                           lambda m: m.score_home >= m.score_away),
-            EventCondition("home_or_away", "Home win or away win", "double_chance", EventType.TEAM_STATS,
-                           lambda m: m.score_home != m.score_away),
-            EventCondition("draw_or_away", "Draw or away win", "double_chance", EventType.TEAM_STATS,
-                           lambda m: m.score_home <= m.score_away),
-
-            # --- draw_no_bet ---
-            EventCondition("home_win_dnb", "Home win (draw no bet)", "draw_no_bet", EventType.TEAM_STATS,
-                           lambda m: m.score_home > m.score_away),
-            EventCondition("away_win_dnb", "Away win (draw no bet)", "draw_no_bet", EventType.TEAM_STATS,
-                           lambda m: m.score_away > m.score_home),
-
-            # --- halftime_fulltime ---
-            EventCondition("home_home", "Home/Home (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
-                           lambda m: EventPatterns._get_halftime_fulltime(m) == "home_home"),
-            EventCondition("home_draw", "Home/Draw (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
-                           lambda m: EventPatterns._get_halftime_fulltime(m) == "home_draw"),
-            EventCondition("home_away", "Home/Away (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
-                           lambda m: EventPatterns._get_halftime_fulltime(m) == "home_away"),
-            EventCondition("draw_home", "Draw/Home (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
-                           lambda m: EventPatterns._get_halftime_fulltime(m) == "draw_home"),
-            EventCondition("draw_draw", "Draw/Draw (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
-                           lambda m: EventPatterns._get_halftime_fulltime(m) == "draw_draw"),
-            EventCondition("draw_away", "Draw/Away (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
-                           lambda m: EventPatterns._get_halftime_fulltime(m) == "draw_away"),
-            EventCondition("away_home", "Away/Home (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
-                           lambda m: EventPatterns._get_halftime_fulltime(m) == "away_home"),
-            EventCondition("away_draw", "Away/Draw (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
-                           lambda m: EventPatterns._get_halftime_fulltime(m) == "away_draw"),
-            EventCondition("away_away", "Away/Away (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
-                           lambda m: EventPatterns._get_halftime_fulltime(m) == "away_away"),
-
-            # --- home_no_bet ---
-            EventCondition("home_no_bet_draw", "Home no bet: Draw", "home_no_bet", EventType.TEAM_STATS,
-                           lambda m: m.score_home == m.score_away),
-            EventCondition("home_no_bet_away", "Home no bet: Away", "home_no_bet", EventType.TEAM_STATS,
-                           lambda m: m.score_away > m.score_home),
-
-            # --- away_no_bet ---
-            EventCondition("away_no_bet_home", "Away no bet: Home", "away_no_bet", EventType.TEAM_STATS,
-                           lambda m: m.score_home > m.score_away),
-            EventCondition("away_no_bet_draw", "Away no bet: Draw", "away_no_bet", EventType.TEAM_STATS,
-                           lambda m: m.score_home == m.score_away),
-
-            # =============================================================
-            # --- HALF-TIME MARKETS ---
-            # =============================================================
-
-            # --- first_half_1x2 ---
-            EventCondition("first_half_home_win", "First half: Home win", "first_half_1x2", EventType.HALF_STATS,
-                           lambda m: EventPatterns._first_half_result(m) == "home"),
-            EventCondition("first_half_draw", "First half: Draw", "first_half_1x2", EventType.HALF_STATS,
-                           lambda m: EventPatterns._first_half_result(m) == "draw"),
-            EventCondition("first_half_away_win", "First half: Away win", "first_half_1x2", EventType.HALF_STATS,
-                           lambda m: EventPatterns._first_half_result(m) == "away"),
-
-            # --- first_half_over_under ---
-            EventCondition("first_half_over_0_5", "First half goals over 0.5", "first_half_over_under",
-                           EventType.HALF_STATS,
-                           lambda m: EventPatterns._first_half_goals(m) > 0.5),
-            EventCondition("first_half_over_1_5", "First half goals over 1.5", "first_half_over_under",
-                           EventType.HALF_STATS,
-                           lambda m: EventPatterns._first_half_goals(m) > 1.5),
-            EventCondition("first_half_over_2_5", "First half goals over 2.5", "first_half_over_under",
-                           EventType.HALF_STATS,
-                           lambda m: EventPatterns._first_half_goals(m) > 2.5),
-            EventCondition("first_half_under_0_5", "First half goals under 0.5", "first_half_over_under",
-                           EventType.HALF_STATS,
-                           lambda m: EventPatterns._first_half_goals(m) < 0.5),
-            EventCondition("first_half_under_1_5", "First half goals under 1.5", "first_half_over_under",
-                           EventType.HALF_STATS,
-                           lambda m: EventPatterns._first_half_goals(m) < 1.5),
-            EventCondition("first_half_under_2_5", "First half goals under 2.5", "first_half_over_under",
-                           EventType.HALF_STATS,
-                           lambda m: EventPatterns._first_half_goals(m) < 2.5),
-
-            # --- first_half_btts ---
-            EventCondition("first_half_btts_yes", "Both teams score in first half", "first_half_btts",
-                           EventType.HALF_STATS,
-                           lambda m: EventPatterns._first_half_btts(m)),
-            EventCondition("first_half_btts_no", "Not both teams score in first half", "first_half_btts",
-                           EventType.HALF_STATS,
-                           lambda m: not EventPatterns._first_half_btts(m)),
-
-            # --- first_half_double_chance ---
-            EventCondition("first_half_home_or_draw", "First half: Home or draw", "first_half_double_chance",
-                           EventType.HALF_STATS,
-                           lambda m: EventPatterns._first_half_result(m) in ["home", "draw"]),
-            EventCondition("first_half_home_or_away", "First half: Home or away", "first_half_double_chance",
-                           EventType.HALF_STATS,
-                           lambda m: EventPatterns._first_half_result(m) in ["home", "away"]),
-            EventCondition("first_half_draw_or_away", "First half: Draw or away", "first_half_double_chance",
-                           EventType.HALF_STATS,
-                           lambda m: EventPatterns._first_half_result(m) in ["draw", "away"]),
-
-            # --- second_half_1x2 ---
-            EventCondition("second_half_home_win", "Second half: Home win", "second_half_1x2", EventType.HALF_STATS,
-                           lambda m: EventPatterns._second_half_result(m) == "home"),
-            EventCondition("second_half_draw", "Second half: Draw", "second_half_1x2", EventType.HALF_STATS,
-                           lambda m: EventPatterns._second_half_result(m) == "draw"),
-            EventCondition("second_half_away_win", "Second half: Away win", "second_half_1x2", EventType.HALF_STATS,
-                           lambda m: EventPatterns._second_half_result(m) == "away"),
-
-            # --- second_half_over_under ---
-            EventCondition("second_half_over_0_5", "Second half goals over 0.5", "second_half_over_under",
-                           EventType.HALF_STATS,
-                           lambda m: EventPatterns._second_half_goals(m) > 0.5),
-            EventCondition("second_half_over_1_5", "Second half goals over 1.5", "second_half_over_under",
-                           EventType.HALF_STATS,
-                           lambda m: EventPatterns._second_half_goals(m) > 1.5),
-            EventCondition("second_half_over_2_5", "Second half goals over 2.5", "second_half_over_under",
-                           EventType.HALF_STATS,
-                           lambda m: EventPatterns._second_half_goals(m) > 2.5),
-
-            # --- second_half_btts ---
-            EventCondition("second_half_btts_yes", "Both teams score in second half", "second_half_btts",
-                           EventType.HALF_STATS,
-                           lambda m: EventPatterns._second_half_btts(m)),
-            EventCondition("second_half_btts_no", "Not both teams score in second half", "second_half_btts",
-                           EventType.HALF_STATS,
-                           lambda m: not EventPatterns._second_half_btts(m)),
-
-            # --- both_halves_over_under ---
-            EventCondition("both_halves_over_1_5", "Both halves over 1.5 goals", "both_halves_over_under",
-                           EventType.HALF_STATS,
-                           lambda m: EventPatterns._both_halves_over_1_5(m)),
-            EventCondition("both_halves_under_1_5", "Both halves under 1.5 goals", "both_halves_over_under",
-                           EventType.HALF_STATS,
-                           lambda m: EventPatterns._both_halves_under_1_5(m)),
-
-            # --- 1st_2nd_half_gg_ng ---
-            EventCondition("half_gg_ng_no_no", "Half GG/NG: No/No", "1st_2nd_half_gg_ng", EventType.HALF_STATS,
-                           lambda m: EventPatterns._half_gg_ng(m) == "no_no"),
-            EventCondition("half_gg_ng_yes_no", "Half GG/NG: Yes/No", "1st_2nd_half_gg_ng", EventType.HALF_STATS,
-                           lambda m: EventPatterns._half_gg_ng(m) == "yes_no"),
-            EventCondition("half_gg_ng_yes_yes", "Half GG/NG: Yes/Yes", "1st_2nd_half_gg_ng", EventType.HALF_STATS,
-                           lambda m: EventPatterns._half_gg_ng(m) == "yes_yes"),
-            EventCondition("half_gg_ng_no_yes", "Half GG/NG: No/Yes", "1st_2nd_half_gg_ng", EventType.HALF_STATS,
-                           lambda m: EventPatterns._half_gg_ng(m) == "no_yes"),
-
-            # =============================================================
-            # --- CARDS MARKETS ---
-            # =============================================================
-
-            # --- total_cards_over_under ---
-            EventCondition("over_0_5_cards", "Total cards over 0.5", "total_cards_over_under", EventType.CARDS,
-                           lambda m: EventPatterns._total_cards(m) > 0.5),
-            EventCondition("over_1_5_cards", "Total cards over 1.5", "total_cards_over_under", EventType.CARDS,
-                           lambda m: EventPatterns._total_cards(m) > 1.5),
-            EventCondition("over_2_5_cards", "Total cards over 2.5", "total_cards_over_under", EventType.CARDS,
-                           lambda m: EventPatterns._total_cards(m) > 2.5),
-            EventCondition("over_3_5_cards", "Total cards over 3.5", "total_cards_over_under", EventType.CARDS,
-                           lambda m: EventPatterns._total_cards(m) > 3.5),
-            EventCondition("over_4_5_cards", "Total cards over 4.5", "total_cards_over_under", EventType.CARDS,
-                           lambda m: EventPatterns._total_cards(m) > 4.5),
-            EventCondition("over_5_5_cards", "Total cards over 5.5", "total_cards_over_under", EventType.CARDS,
-                           lambda m: EventPatterns._total_cards(m) > 5.5),
-
-            # --- team_cards_over_under ---
-            EventCondition("home_over_0_5_cards", "Home team cards over 0.5", "team_cards_home", EventType.CARDS,
-                           lambda m: EventPatterns._home_cards(m) > 0.5),
-            EventCondition("home_over_1_5_cards", "Home team cards over 1.5", "team_cards_home", EventType.CARDS,
-                           lambda m: EventPatterns._home_cards(m) > 1.5),
-            EventCondition("home_over_2_5_cards", "Home team cards over 2.5", "team_cards_home", EventType.CARDS,
-                           lambda m: EventPatterns._home_cards(m) > 2.5),
-            EventCondition("away_over_0_5_cards", "Away team cards over 0.5", "team_cards_away", EventType.CARDS,
-                           lambda m: EventPatterns._away_cards(m) > 0.5),
-            EventCondition("away_over_1_5_cards", "Away team cards over 1.5", "team_cards_away", EventType.CARDS,
-                           lambda m: EventPatterns._away_cards(m) > 1.5),
-            EventCondition("away_over_2_5_cards", "Away team cards over 2.5", "team_cards_away", EventType.CARDS,
-                           lambda m: EventPatterns._away_cards(m) > 2.5),
-
-            # --- first_half_cards_over_under ---
-            EventCondition("first_half_over_0_5_cards", "First half cards over 0.5", "first_half_cards",
-                           EventType.CARDS,
-                           lambda m: EventPatterns._first_half_cards(m) > 0.5),
-            EventCondition("first_half_over_1_5_cards", "First half cards over 1.5", "first_half_cards",
-                           EventType.CARDS,
-                           lambda m: EventPatterns._first_half_cards(m) > 1.5),
-            EventCondition("first_half_over_2_5_cards", "First half cards over 2.5", "first_half_cards",
-                           EventType.CARDS,
-                           lambda m: EventPatterns._first_half_cards(m) > 2.5),
-
-            # --- second_half_cards_over_under ---
-            EventCondition("second_half_over_1_5_cards", "Second half cards over 1.5", "second_half_cards",
-                           EventType.CARDS,
-                           lambda m: EventPatterns._second_half_cards(m) > 1.5),
-            EventCondition("second_half_over_2_5_cards", "Second half cards over 2.5", "second_half_cards",
-                           EventType.CARDS,
-                           lambda m: EventPatterns._second_half_cards(m) > 2.5),
-            EventCondition("second_half_over_3_5_cards", "Second half cards over 3.5", "second_half_cards",
-                           EventType.CARDS,
-                           lambda m: EventPatterns._second_half_cards(m) > 3.5),
-
-            # --- match_cards ---
-            EventCondition("match_cards_4_plus", "Match cards 4+", "match_cards", EventType.CARDS,
-                           lambda m: EventPatterns._total_cards(m) >= 4),
-            EventCondition("match_cards_5_plus", "Match cards 5+", "match_cards", EventType.CARDS,
-                           lambda m: EventPatterns._total_cards(m) >= 5),
-            EventCondition("match_cards_6_plus", "Match cards 6+", "match_cards", EventType.CARDS,
-                           lambda m: EventPatterns._total_cards(m) >= 6),
-            EventCondition("match_cards_7_plus", "Match cards 7+", "match_cards", EventType.CARDS,
-                           lambda m: EventPatterns._total_cards(m) >= 7),
-
-            # =============================================================
-            # --- CORNERS MARKETS ---
-            # =============================================================
-
-            # --- total_corners_over_under ---
-            EventCondition("over_8_5_corners", "Total corners over 8.5", "total_corners_over_under", EventType.CORNERS,
-                           lambda m: EventPatterns._total_corners(m) > 8.5),
-            EventCondition("over_9_5_corners", "Total corners over 9.5", "total_corners_over_under", EventType.CORNERS,
-                           lambda m: EventPatterns._total_corners(m) > 9.5),
-            EventCondition("over_10_5_corners", "Total corners over 10.5", "total_corners_over_under",
-                           EventType.CORNERS,
-                           lambda m: EventPatterns._total_corners(m) > 10.5),
-
-            # --- team_corners_over_under ---
-            EventCondition("home_over_4_5_corners", "Home team corners over 4.5", "team_corners_home",
-                           EventType.CORNERS,
-                           lambda m: EventPatterns._home_corners(m) > 4.5),
-            EventCondition("home_over_5_5_corners", "Home team corners over 5.5", "team_corners_home",
-                           EventType.CORNERS,
-                           lambda m: EventPatterns._home_corners(m) > 5.5),
-            EventCondition("away_over_1_5_corners", "Away team corners over 1.5", "team_corners_away",
-                           EventType.CORNERS,
-                           lambda m: EventPatterns._away_corners(m) > 1.5),
-            EventCondition("away_over_2_5_corners", "Away team corners over 2.5", "team_corners_away",
-                           EventType.CORNERS,
-                           lambda m: EventPatterns._away_corners(m) > 2.5),
-
-            # --- first_half_corners_over_under ---
-            EventCondition("first_half_over_3_5_corners", "First half corners over 3.5", "first_half_corners",
-                           EventType.CORNERS,
-                           lambda m: EventPatterns._first_half_corners(m) > 3.5),
-            EventCondition("first_half_over_4_5_corners", "First half corners over 4.5", "first_half_corners",
-                           EventType.CORNERS,
-                           lambda m: EventPatterns._first_half_corners(m) > 4.5),
-            EventCondition("first_half_over_5_5_corners", "First half corners over 5.5", "first_half_corners",
-                           EventType.CORNERS,
-                           lambda m: EventPatterns._first_half_corners(m) > 5.5),
-
-            # --- corner_range ---
-            EventCondition("corner_range_0_8", "Corner range 0-8", "corner_range", EventType.CORNERS,
-                           lambda m: 0 <= EventPatterns._total_corners(m) <= 8),
-            EventCondition("corner_range_9_11", "Corner range 9-11", "corner_range", EventType.CORNERS,
-                           lambda m: 9 <= EventPatterns._total_corners(m) <= 11),
-            EventCondition("corner_range_12_plus", "Corner range 12+", "corner_range", EventType.CORNERS,
-                           lambda m: EventPatterns._total_corners(m) >= 12),
-
-            # --- odd_even_corners ---
-            EventCondition("corners_odd", "Total corners odd", "odd_even_corners", EventType.CORNERS,
-                           lambda m: EventPatterns._total_corners(m) % 2 == 1),
-            EventCondition("corners_even", "Total corners even", "odd_even_corners", EventType.CORNERS,
-                           lambda m: EventPatterns._total_corners(m) % 2 == 0),
+            #
+            # # =============================================================
+            # # --- MATCH RESULT MARKETS ---
+            # # =============================================================
+            #
+            # # --- 1x2 ---
+            # EventCondition("home_win", "Home team wins", "1x2", EventType.TEAM_STATS,
+            #                lambda m: m.score_home > m.score_away),
+            # EventCondition("draw", "Match ends in draw", "1x2", EventType.TEAM_STATS,
+            #                lambda m: m.score_home == m.score_away),
+            # EventCondition("away_win", "Away team wins", "1x2", EventType.TEAM_STATS,
+            #                lambda m: m.score_away > m.score_home),
+            #
+            # # --- double_chance ---
+            # EventCondition("home_or_draw", "Home win or draw", "double_chance", EventType.TEAM_STATS,
+            #                lambda m: m.score_home >= m.score_away),
+            # EventCondition("home_or_away", "Home win or away win", "double_chance", EventType.TEAM_STATS,
+            #                lambda m: m.score_home != m.score_away),
+            # EventCondition("draw_or_away", "Draw or away win", "double_chance", EventType.TEAM_STATS,
+            #                lambda m: m.score_home <= m.score_away),
+            #
+            # # --- draw_no_bet ---
+            # EventCondition("home_win_dnb", "Home win (draw no bet)", "draw_no_bet", EventType.TEAM_STATS,
+            #                lambda m: m.score_home > m.score_away),
+            # EventCondition("away_win_dnb", "Away win (draw no bet)", "draw_no_bet", EventType.TEAM_STATS,
+            #                lambda m: m.score_away > m.score_home),
+            #
+            # # --- halftime_fulltime ---
+            # EventCondition("home_home", "Home/Home (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
+            #                lambda m: EventPatterns._get_halftime_fulltime(m) == "home_home"),
+            # EventCondition("home_draw", "Home/Draw (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
+            #                lambda m: EventPatterns._get_halftime_fulltime(m) == "home_draw"),
+            # EventCondition("home_away", "Home/Away (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
+            #                lambda m: EventPatterns._get_halftime_fulltime(m) == "home_away"),
+            # EventCondition("draw_home", "Draw/Home (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
+            #                lambda m: EventPatterns._get_halftime_fulltime(m) == "draw_home"),
+            # EventCondition("draw_draw", "Draw/Draw (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
+            #                lambda m: EventPatterns._get_halftime_fulltime(m) == "draw_draw"),
+            # EventCondition("draw_away", "Draw/Away (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
+            #                lambda m: EventPatterns._get_halftime_fulltime(m) == "draw_away"),
+            # EventCondition("away_home", "Away/Home (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
+            #                lambda m: EventPatterns._get_halftime_fulltime(m) == "away_home"),
+            # EventCondition("away_draw", "Away/Draw (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
+            #                lambda m: EventPatterns._get_halftime_fulltime(m) == "away_draw"),
+            # EventCondition("away_away", "Away/Away (HT/FT)", "halftime_fulltime", EventType.TEAM_STATS,
+            #                lambda m: EventPatterns._get_halftime_fulltime(m) == "away_away"),
+            #
+            # # --- home_no_bet ---
+            # EventCondition("home_no_bet_draw", "Home no bet: Draw", "home_no_bet", EventType.TEAM_STATS,
+            #                lambda m: m.score_home == m.score_away),
+            # EventCondition("home_no_bet_away", "Home no bet: Away", "home_no_bet", EventType.TEAM_STATS,
+            #                lambda m: m.score_away > m.score_home),
+            #
+            # # --- away_no_bet ---
+            # EventCondition("away_no_bet_home", "Away no bet: Home", "away_no_bet", EventType.TEAM_STATS,
+            #                lambda m: m.score_home > m.score_away),
+            # EventCondition("away_no_bet_draw", "Away no bet: Draw", "away_no_bet", EventType.TEAM_STATS,
+            #                lambda m: m.score_home == m.score_away),
+            #
+            # # =============================================================
+            # # --- HALF-TIME MARKETS ---
+            # # =============================================================
+            #
+            # # --- first_half_1x2 ---
+            # EventCondition("first_half_home_win", "First half: Home win", "first_half_1x2", EventType.HALF_STATS,
+            #                lambda m: EventPatterns._first_half_result(m) == "home"),
+            # EventCondition("first_half_draw", "First half: Draw", "first_half_1x2", EventType.HALF_STATS,
+            #                lambda m: EventPatterns._first_half_result(m) == "draw"),
+            # EventCondition("first_half_away_win", "First half: Away win", "first_half_1x2", EventType.HALF_STATS,
+            #                lambda m: EventPatterns._first_half_result(m) == "away"),
+            #
+            # # --- first_half_over_under ---
+            # EventCondition("first_half_over_0_5", "First half goals over 0.5", "first_half_over_under",
+            #                EventType.HALF_STATS,
+            #                lambda m: EventPatterns._first_half_goals(m) > 0.5),
+            # EventCondition("first_half_over_1_5", "First half goals over 1.5", "first_half_over_under",
+            #                EventType.HALF_STATS,
+            #                lambda m: EventPatterns._first_half_goals(m) > 1.5),
+            # EventCondition("first_half_over_2_5", "First half goals over 2.5", "first_half_over_under",
+            #                EventType.HALF_STATS,
+            #                lambda m: EventPatterns._first_half_goals(m) > 2.5),
+            # EventCondition("first_half_under_0_5", "First half goals under 0.5", "first_half_over_under",
+            #                EventType.HALF_STATS,
+            #                lambda m: EventPatterns._first_half_goals(m) < 0.5),
+            # EventCondition("first_half_under_1_5", "First half goals under 1.5", "first_half_over_under",
+            #                EventType.HALF_STATS,
+            #                lambda m: EventPatterns._first_half_goals(m) < 1.5),
+            # EventCondition("first_half_under_2_5", "First half goals under 2.5", "first_half_over_under",
+            #                EventType.HALF_STATS,
+            #                lambda m: EventPatterns._first_half_goals(m) < 2.5),
+            #
+            # # --- first_half_btts ---
+            # EventCondition("first_half_btts_yes", "Both teams score in first half", "first_half_btts",
+            #                EventType.HALF_STATS,
+            #                lambda m: EventPatterns._first_half_btts(m)),
+            # EventCondition("first_half_btts_no", "Not both teams score in first half", "first_half_btts",
+            #                EventType.HALF_STATS,
+            #                lambda m: not EventPatterns._first_half_btts(m)),
+            #
+            # # --- first_half_double_chance ---
+            # EventCondition("first_half_home_or_draw", "First half: Home or draw", "first_half_double_chance",
+            #                EventType.HALF_STATS,
+            #                lambda m: EventPatterns._first_half_result(m) in ["home", "draw"]),
+            # EventCondition("first_half_home_or_away", "First half: Home or away", "first_half_double_chance",
+            #                EventType.HALF_STATS,
+            #                lambda m: EventPatterns._first_half_result(m) in ["home", "away"]),
+            # EventCondition("first_half_draw_or_away", "First half: Draw or away", "first_half_double_chance",
+            #                EventType.HALF_STATS,
+            #                lambda m: EventPatterns._first_half_result(m) in ["draw", "away"]),
+            #
+            # # --- second_half_1x2 ---
+            # EventCondition("second_half_home_win", "Second half: Home win", "second_half_1x2", EventType.HALF_STATS,
+            #                lambda m: EventPatterns._second_half_result(m) == "home"),
+            # EventCondition("second_half_draw", "Second half: Draw", "second_half_1x2", EventType.HALF_STATS,
+            #                lambda m: EventPatterns._second_half_result(m) == "draw"),
+            # EventCondition("second_half_away_win", "Second half: Away win", "second_half_1x2", EventType.HALF_STATS,
+            #                lambda m: EventPatterns._second_half_result(m) == "away"),
+            #
+            # # --- second_half_over_under ---
+            # EventCondition("second_half_over_0_5", "Second half goals over 0.5", "second_half_over_under",
+            #                EventType.HALF_STATS,
+            #                lambda m: EventPatterns._second_half_goals(m) > 0.5),
+            # EventCondition("second_half_over_1_5", "Second half goals over 1.5", "second_half_over_under",
+            #                EventType.HALF_STATS,
+            #                lambda m: EventPatterns._second_half_goals(m) > 1.5),
+            # EventCondition("second_half_over_2_5", "Second half goals over 2.5", "second_half_over_under",
+            #                EventType.HALF_STATS,
+            #                lambda m: EventPatterns._second_half_goals(m) > 2.5),
+            #
+            # # --- second_half_btts ---
+            # EventCondition("second_half_btts_yes", "Both teams score in second half", "second_half_btts",
+            #                EventType.HALF_STATS,
+            #                lambda m: EventPatterns._second_half_btts(m)),
+            # EventCondition("second_half_btts_no", "Not both teams score in second half", "second_half_btts",
+            #                EventType.HALF_STATS,
+            #                lambda m: not EventPatterns._second_half_btts(m)),
+            #
+            # # --- both_halves_over_under ---
+            # EventCondition("both_halves_over_1_5", "Both halves over 1.5 goals", "both_halves_over_under",
+            #                EventType.HALF_STATS,
+            #                lambda m: EventPatterns._both_halves_over_1_5(m)),
+            # EventCondition("both_halves_under_1_5", "Both halves under 1.5 goals", "both_halves_over_under",
+            #                EventType.HALF_STATS,
+            #                lambda m: EventPatterns._both_halves_under_1_5(m)),
+            #
+            # # --- 1st_2nd_half_gg_ng ---
+            # EventCondition("half_gg_ng_no_no", "Half GG/NG: No/No", "1st_2nd_half_gg_ng", EventType.HALF_STATS,
+            #                lambda m: EventPatterns._half_gg_ng(m) == "no_no"),
+            # EventCondition("half_gg_ng_yes_no", "Half GG/NG: Yes/No", "1st_2nd_half_gg_ng", EventType.HALF_STATS,
+            #                lambda m: EventPatterns._half_gg_ng(m) == "yes_no"),
+            # EventCondition("half_gg_ng_yes_yes", "Half GG/NG: Yes/Yes", "1st_2nd_half_gg_ng", EventType.HALF_STATS,
+            #                lambda m: EventPatterns._half_gg_ng(m) == "yes_yes"),
+            # EventCondition("half_gg_ng_no_yes", "Half GG/NG: No/Yes", "1st_2nd_half_gg_ng", EventType.HALF_STATS,
+            #                lambda m: EventPatterns._half_gg_ng(m) == "no_yes"),
+            #
+            # # =============================================================
+            # # --- CARDS MARKETS ---
+            # # =============================================================
+            #
+            # # --- total_cards_over_under ---
+            # EventCondition("over_0_5_cards", "Total cards over 0.5", "total_cards_over_under", EventType.CARDS,
+            #                lambda m: EventPatterns._total_cards(m) > 0.5),
+            # EventCondition("over_1_5_cards", "Total cards over 1.5", "total_cards_over_under", EventType.CARDS,
+            #                lambda m: EventPatterns._total_cards(m) > 1.5),
+            # EventCondition("over_2_5_cards", "Total cards over 2.5", "total_cards_over_under", EventType.CARDS,
+            #                lambda m: EventPatterns._total_cards(m) > 2.5),
+            # EventCondition("over_3_5_cards", "Total cards over 3.5", "total_cards_over_under", EventType.CARDS,
+            #                lambda m: EventPatterns._total_cards(m) > 3.5),
+            # EventCondition("over_4_5_cards", "Total cards over 4.5", "total_cards_over_under", EventType.CARDS,
+            #                lambda m: EventPatterns._total_cards(m) > 4.5),
+            # EventCondition("over_5_5_cards", "Total cards over 5.5", "total_cards_over_under", EventType.CARDS,
+            #                lambda m: EventPatterns._total_cards(m) > 5.5),
+            #
+            # # --- team_cards_over_under ---
+            # EventCondition("home_over_0_5_cards", "Home team cards over 0.5", "team_cards_home", EventType.CARDS,
+            #                lambda m: EventPatterns._home_cards(m) > 0.5),
+            # EventCondition("home_over_1_5_cards", "Home team cards over 1.5", "team_cards_home", EventType.CARDS,
+            #                lambda m: EventPatterns._home_cards(m) > 1.5),
+            # EventCondition("home_over_2_5_cards", "Home team cards over 2.5", "team_cards_home", EventType.CARDS,
+            #                lambda m: EventPatterns._home_cards(m) > 2.5),
+            # EventCondition("away_over_0_5_cards", "Away team cards over 0.5", "team_cards_away", EventType.CARDS,
+            #                lambda m: EventPatterns._away_cards(m) > 0.5),
+            # EventCondition("away_over_1_5_cards", "Away team cards over 1.5", "team_cards_away", EventType.CARDS,
+            #                lambda m: EventPatterns._away_cards(m) > 1.5),
+            # EventCondition("away_over_2_5_cards", "Away team cards over 2.5", "team_cards_away", EventType.CARDS,
+            #                lambda m: EventPatterns._away_cards(m) > 2.5),
+            #
+            # # --- first_half_cards_over_under ---
+            # EventCondition("first_half_over_0_5_cards", "First half cards over 0.5", "first_half_cards",
+            #                EventType.CARDS,
+            #                lambda m: EventPatterns._first_half_cards(m) > 0.5),
+            # EventCondition("first_half_over_1_5_cards", "First half cards over 1.5", "first_half_cards",
+            #                EventType.CARDS,
+            #                lambda m: EventPatterns._first_half_cards(m) > 1.5),
+            # EventCondition("first_half_over_2_5_cards", "First half cards over 2.5", "first_half_cards",
+            #                EventType.CARDS,
+            #                lambda m: EventPatterns._first_half_cards(m) > 2.5),
+            #
+            # # --- second_half_cards_over_under ---
+            # EventCondition("second_half_over_1_5_cards", "Second half cards over 1.5", "second_half_cards",
+            #                EventType.CARDS,
+            #                lambda m: EventPatterns._second_half_cards(m) > 1.5),
+            # EventCondition("second_half_over_2_5_cards", "Second half cards over 2.5", "second_half_cards",
+            #                EventType.CARDS,
+            #                lambda m: EventPatterns._second_half_cards(m) > 2.5),
+            # EventCondition("second_half_over_3_5_cards", "Second half cards over 3.5", "second_half_cards",
+            #                EventType.CARDS,
+            #                lambda m: EventPatterns._second_half_cards(m) > 3.5),
+            #
+            # # --- match_cards ---
+            # EventCondition("match_cards_4_plus", "Match cards 4+", "match_cards", EventType.CARDS,
+            #                lambda m: EventPatterns._total_cards(m) >= 4),
+            # EventCondition("match_cards_5_plus", "Match cards 5+", "match_cards", EventType.CARDS,
+            #                lambda m: EventPatterns._total_cards(m) >= 5),
+            # EventCondition("match_cards_6_plus", "Match cards 6+", "match_cards", EventType.CARDS,
+            #                lambda m: EventPatterns._total_cards(m) >= 6),
+            # EventCondition("match_cards_7_plus", "Match cards 7+", "match_cards", EventType.CARDS,
+            #                lambda m: EventPatterns._total_cards(m) >= 7),
+            #
+            # # =============================================================
+            # # --- CORNERS MARKETS ---
+            # # =============================================================
+            #
+            # # --- total_corners_over_under ---
+            # EventCondition("over_8_5_corners", "Total corners over 8.5", "total_corners_over_under", EventType.CORNERS,
+            #                lambda m: EventPatterns._total_corners(m) > 8.5),
+            # EventCondition("over_9_5_corners", "Total corners over 9.5", "total_corners_over_under", EventType.CORNERS,
+            #                lambda m: EventPatterns._total_corners(m) > 9.5),
+            # EventCondition("over_10_5_corners", "Total corners over 10.5", "total_corners_over_under",
+            #                EventType.CORNERS,
+            #                lambda m: EventPatterns._total_corners(m) > 10.5),
+            #
+            # # --- team_corners_over_under ---
+            # EventCondition("home_over_4_5_corners", "Home team corners over 4.5", "team_corners_home",
+            #                EventType.CORNERS,
+            #                lambda m: EventPatterns._home_corners(m) > 4.5),
+            # EventCondition("home_over_5_5_corners", "Home team corners over 5.5", "team_corners_home",
+            #                EventType.CORNERS,
+            #                lambda m: EventPatterns._home_corners(m) > 5.5),
+            # EventCondition("away_over_1_5_corners", "Away team corners over 1.5", "team_corners_away",
+            #                EventType.CORNERS,
+            #                lambda m: EventPatterns._away_corners(m) > 1.5),
+            # EventCondition("away_over_2_5_corners", "Away team corners over 2.5", "team_corners_away",
+            #                EventType.CORNERS,
+            #                lambda m: EventPatterns._away_corners(m) > 2.5),
+            #
+            # # --- first_half_corners_over_under ---
+            # EventCondition("first_half_over_3_5_corners", "First half corners over 3.5", "first_half_corners",
+            #                EventType.CORNERS,
+            #                lambda m: EventPatterns._first_half_corners(m) > 3.5),
+            # EventCondition("first_half_over_4_5_corners", "First half corners over 4.5", "first_half_corners",
+            #                EventType.CORNERS,
+            #                lambda m: EventPatterns._first_half_corners(m) > 4.5),
+            # EventCondition("first_half_over_5_5_corners", "First half corners over 5.5", "first_half_corners",
+            #                EventType.CORNERS,
+            #                lambda m: EventPatterns._first_half_corners(m) > 5.5),
+            #
+            # # --- corner_range ---
+            # EventCondition("corner_range_0_8", "Corner range 0-8", "corner_range", EventType.CORNERS,
+            #                lambda m: 0 <= EventPatterns._total_corners(m) <= 8),
+            # EventCondition("corner_range_9_11", "Corner range 9-11", "corner_range", EventType.CORNERS,
+            #                lambda m: 9 <= EventPatterns._total_corners(m) <= 11),
+            # EventCondition("corner_range_12_plus", "Corner range 12+", "corner_range", EventType.CORNERS,
+            #                lambda m: EventPatterns._total_corners(m) >= 12),
+            #
+            # # --- odd_even_corners ---
+            # EventCondition("corners_odd", "Total corners odd", "odd_even_corners", EventType.CORNERS,
+            #                lambda m: EventPatterns._total_corners(m) % 2 == 1),
+            # EventCondition("corners_even", "Total corners even", "odd_even_corners", EventType.CORNERS,
+            #                lambda m: EventPatterns._total_corners(m) % 2 == 0),
 
             # Add more patterns as needed...
         ]

@@ -246,26 +246,6 @@ class APIFootballClient:
         # Generate derived events
         self._generate_derived_events(match)
 
-    def _cache_complete_match(self, match: Match):
-        """Cache complete match data for future use"""
-        match_data = {
-            'complete': True,
-            'events': [event.to_dict() for event in match.events],
-            'home_stats': match.home_stats.__dict__ if match.home_stats else None,
-            'away_stats': match.away_stats.__dict__ if match.away_stats else None,
-            'first_half': match.first_half.__dict__,
-            'second_half': match.second_half.__dict__,
-            'basic_info': {
-                'league': match.league,
-                'season': match.season,
-                'home_team': match.home_team,
-                'away_team': match.away_team,
-                'score_home': match.score_home,
-                'score_away': match.score_away
-            }
-        }
-        self.cache.set_match_data(match.id, match_data)
-
     def _process_events(self, match: Match, events_data: List[Dict[str, Any]]):
         """Process match events"""
         for event_data in events_data:

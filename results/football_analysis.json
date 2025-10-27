@@ -28,7 +28,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -54,7 +55,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -80,7 +82,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -106,7 +109,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -132,7 +136,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -158,7 +163,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -184,7 +190,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -210,7 +217,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -236,7 +244,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -262,7 +271,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -288,7 +298,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -314,7 +325,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -340,7 +352,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -366,7 +379,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -392,7 +406,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -418,7 +433,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -444,7 +460,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -470,7 +487,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -496,7 +514,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -522,7 +541,8 @@
             "combination_size": 3,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           }
         ],
         "most_occurred": [
@@ -550,7 +570,8 @@
             "combination_size": 3,
             "occurrence_count": 340,
             "percentage": 89.23884514435696,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -576,7 +597,8 @@
             "combination_size": 3,
             "occurrence_count": 331,
             "percentage": 86.8766404199475,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -602,7 +624,8 @@
             "combination_size": 3,
             "occurrence_count": 325,
             "percentage": 85.30183727034121,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -628,7 +651,8 @@
             "combination_size": 3,
             "occurrence_count": 325,
             "percentage": 85.30183727034121,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -654,7 +678,8 @@
             "combination_size": 3,
             "occurrence_count": 324,
             "percentage": 85.03937007874016,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -680,7 +705,8 @@
             "combination_size": 3,
             "occurrence_count": 323,
             "percentage": 84.7769028871391,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -706,7 +732,8 @@
             "combination_size": 3,
             "occurrence_count": 323,
             "percentage": 84.7769028871391,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -732,7 +759,8 @@
             "combination_size": 3,
             "occurrence_count": 323,
             "percentage": 84.7769028871391,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -758,7 +786,8 @@
             "combination_size": 3,
             "occurrence_count": 322,
             "percentage": 84.51443569553805,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -784,7 +813,8 @@
             "combination_size": 3,
             "occurrence_count": 319,
             "percentage": 83.72703412073491,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -810,7 +840,8 @@
             "combination_size": 3,
             "occurrence_count": 319,
             "percentage": 83.72703412073491,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -836,7 +867,8 @@
             "combination_size": 3,
             "occurrence_count": 317,
             "percentage": 83.2020997375328,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -862,7 +894,8 @@
             "combination_size": 3,
             "occurrence_count": 316,
             "percentage": 82.93963254593176,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -888,7 +921,8 @@
             "combination_size": 3,
             "occurrence_count": 313,
             "percentage": 82.1522309711286,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -914,7 +948,8 @@
             "combination_size": 3,
             "occurrence_count": 309,
             "percentage": 81.10236220472441,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -940,7 +975,8 @@
             "combination_size": 3,
             "occurrence_count": 309,
             "percentage": 81.10236220472441,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -966,7 +1002,8 @@
             "combination_size": 3,
             "occurrence_count": 309,
             "percentage": 81.10236220472441,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -992,7 +1029,8 @@
             "combination_size": 3,
             "occurrence_count": 309,
             "percentage": 81.10236220472441,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1018,7 +1056,8 @@
             "combination_size": 3,
             "occurrence_count": 308,
             "percentage": 80.83989501312337,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1044,7 +1083,8 @@
             "combination_size": 3,
             "occurrence_count": 308,
             "percentage": 80.83989501312337,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           }
         ],
         "total_combinations": 195574,
@@ -1084,7 +1124,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1116,7 +1157,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1148,7 +1190,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1180,7 +1223,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1212,7 +1256,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1244,7 +1289,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1276,7 +1322,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1308,7 +1355,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1340,7 +1388,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1372,7 +1421,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1404,7 +1454,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1436,7 +1487,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1468,7 +1520,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1500,7 +1553,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1532,7 +1586,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1564,7 +1619,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1596,7 +1652,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1628,7 +1685,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1660,7 +1718,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1692,7 +1751,8 @@
             "combination_size": 4,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           }
         ],
         "most_occurred": [
@@ -1726,7 +1786,8 @@
             "combination_size": 4,
             "occurrence_count": 303,
             "percentage": 79.52755905511812,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1758,7 +1819,8 @@
             "combination_size": 4,
             "occurrence_count": 293,
             "percentage": 76.9028871391076,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1790,7 +1852,8 @@
             "combination_size": 4,
             "occurrence_count": 289,
             "percentage": 75.8530183727034,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1822,7 +1885,8 @@
             "combination_size": 4,
             "occurrence_count": 289,
             "percentage": 75.8530183727034,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1854,7 +1918,8 @@
             "combination_size": 4,
             "occurrence_count": 288,
             "percentage": 75.59055118110236,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1886,7 +1951,8 @@
             "combination_size": 4,
             "occurrence_count": 287,
             "percentage": 75.32808398950131,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1918,7 +1984,8 @@
             "combination_size": 4,
             "occurrence_count": 287,
             "percentage": 75.32808398950131,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1950,7 +2017,8 @@
             "combination_size": 4,
             "occurrence_count": 286,
             "percentage": 75.06561679790026,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -1982,7 +2050,8 @@
             "combination_size": 4,
             "occurrence_count": 279,
             "percentage": 73.22834645669292,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2014,7 +2083,8 @@
             "combination_size": 4,
             "occurrence_count": 276,
             "percentage": 72.44094488188976,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2046,7 +2116,8 @@
             "combination_size": 4,
             "occurrence_count": 276,
             "percentage": 72.44094488188976,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2078,7 +2149,8 @@
             "combination_size": 4,
             "occurrence_count": 274,
             "percentage": 71.91601049868767,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2110,7 +2182,8 @@
             "combination_size": 4,
             "occurrence_count": 274,
             "percentage": 71.91601049868767,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2142,7 +2215,8 @@
             "combination_size": 4,
             "occurrence_count": 274,
             "percentage": 71.91601049868767,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2174,7 +2248,8 @@
             "combination_size": 4,
             "occurrence_count": 274,
             "percentage": 71.91601049868767,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2206,7 +2281,8 @@
             "combination_size": 4,
             "occurrence_count": 273,
             "percentage": 71.65354330708661,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2238,7 +2314,8 @@
             "combination_size": 4,
             "occurrence_count": 273,
             "percentage": 71.65354330708661,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2270,7 +2347,8 @@
             "combination_size": 4,
             "occurrence_count": 271,
             "percentage": 71.12860892388451,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2302,7 +2380,8 @@
             "combination_size": 4,
             "occurrence_count": 271,
             "percentage": 71.12860892388451,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2334,7 +2413,8 @@
             "combination_size": 4,
             "occurrence_count": 271,
             "percentage": 71.12860892388451,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           }
         ],
         "total_combinations": 1828396,
@@ -2380,7 +2460,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2418,7 +2499,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2456,7 +2538,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2494,7 +2577,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2532,7 +2616,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2570,7 +2655,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2608,7 +2694,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2646,7 +2733,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2684,7 +2772,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2722,7 +2811,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2760,7 +2850,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2798,7 +2889,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2836,7 +2928,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2874,7 +2967,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2912,7 +3006,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2950,7 +3045,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -2988,7 +3084,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3026,7 +3123,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3064,7 +3162,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3102,7 +3201,8 @@
             "combination_size": 5,
             "occurrence_count": 1,
             "percentage": 0.26246719160104987,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           }
         ],
         "most_occurred": [
@@ -3142,7 +3242,8 @@
             "combination_size": 5,
             "occurrence_count": 225,
             "percentage": 59.055118110236215,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3180,7 +3281,8 @@
             "combination_size": 5,
             "occurrence_count": 225,
             "percentage": 59.055118110236215,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3218,7 +3320,8 @@
             "combination_size": 5,
             "occurrence_count": 224,
             "percentage": 58.79265091863517,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3256,7 +3359,8 @@
             "combination_size": 5,
             "occurrence_count": 220,
             "percentage": 57.74278215223097,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3294,7 +3398,8 @@
             "combination_size": 5,
             "occurrence_count": 217,
             "percentage": 56.95538057742782,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3332,7 +3437,8 @@
             "combination_size": 5,
             "occurrence_count": 217,
             "percentage": 56.95538057742782,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3370,7 +3476,8 @@
             "combination_size": 5,
             "occurrence_count": 216,
             "percentage": 56.69291338582677,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3408,7 +3515,8 @@
             "combination_size": 5,
             "occurrence_count": 214,
             "percentage": 56.16797900262467,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3446,7 +3554,8 @@
             "combination_size": 5,
             "occurrence_count": 214,
             "percentage": 56.16797900262467,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3484,7 +3593,8 @@
             "combination_size": 5,
             "occurrence_count": 213,
             "percentage": 55.90551181102362,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3522,7 +3632,8 @@
             "combination_size": 5,
             "occurrence_count": 212,
             "percentage": 55.643044619422575,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3560,7 +3671,8 @@
             "combination_size": 5,
             "occurrence_count": 211,
             "percentage": 55.38057742782152,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3598,7 +3710,8 @@
             "combination_size": 5,
             "occurrence_count": 211,
             "percentage": 55.38057742782152,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3636,7 +3749,8 @@
             "combination_size": 5,
             "occurrence_count": 210,
             "percentage": 55.118110236220474,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3674,7 +3788,8 @@
             "combination_size": 5,
             "occurrence_count": 210,
             "percentage": 55.118110236220474,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3712,7 +3827,8 @@
             "combination_size": 5,
             "occurrence_count": 210,
             "percentage": 55.118110236220474,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3750,7 +3866,8 @@
             "combination_size": 5,
             "occurrence_count": 209,
             "percentage": 54.85564304461942,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3788,7 +3905,8 @@
             "combination_size": 5,
             "occurrence_count": 206,
             "percentage": 54.06824146981627,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3826,7 +3944,8 @@
             "combination_size": 5,
             "occurrence_count": 206,
             "percentage": 54.06824146981627,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           },
           {
             "events": [
@@ -3864,7 +3983,8 @@
             "combination_size": 5,
             "occurrence_count": 205,
             "percentage": 53.805774278215225,
-            "strategy": "by_event_type"
+            "strategy": "by_event_type",
+            "odds_info": null
           }
         ],
         "total_combinations": 6071929,
@@ -3898,7 +4018,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -3924,7 +4045,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -3950,7 +4072,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -3976,7 +4099,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4002,7 +4126,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4028,7 +4153,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4054,7 +4180,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4080,7 +4207,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4106,7 +4234,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4132,7 +4261,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4158,7 +4288,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4184,7 +4315,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4210,7 +4342,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4236,7 +4369,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4262,7 +4396,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4288,7 +4423,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4314,7 +4450,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4340,7 +4477,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4366,7 +4504,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4392,7 +4531,8 @@
         "combination_size": 3,
         "occurrence_count": 1,
         "percentage": 0.26246719160104987,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       }
     ],
     "most_occurred": [
@@ -4420,7 +4560,8 @@
         "combination_size": 3,
         "occurrence_count": 308,
         "percentage": 80.83989501312337,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4446,7 +4587,8 @@
         "combination_size": 3,
         "occurrence_count": 308,
         "percentage": 80.83989501312337,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4472,7 +4614,8 @@
         "combination_size": 3,
         "occurrence_count": 309,
         "percentage": 81.10236220472441,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4498,7 +4641,8 @@
         "combination_size": 3,
         "occurrence_count": 309,
         "percentage": 81.10236220472441,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4524,7 +4668,8 @@
         "combination_size": 3,
         "occurrence_count": 309,
         "percentage": 81.10236220472441,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4550,7 +4695,8 @@
         "combination_size": 3,
         "occurrence_count": 309,
         "percentage": 81.10236220472441,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4576,7 +4722,8 @@
         "combination_size": 3,
         "occurrence_count": 313,
         "percentage": 82.1522309711286,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4602,7 +4749,8 @@
         "combination_size": 3,
         "occurrence_count": 316,
         "percentage": 82.93963254593176,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4628,7 +4776,8 @@
         "combination_size": 3,
         "occurrence_count": 317,
         "percentage": 83.2020997375328,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4654,7 +4803,8 @@
         "combination_size": 3,
         "occurrence_count": 319,
         "percentage": 83.72703412073491,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4680,7 +4830,8 @@
         "combination_size": 3,
         "occurrence_count": 319,
         "percentage": 83.72703412073491,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4706,7 +4857,8 @@
         "combination_size": 3,
         "occurrence_count": 322,
         "percentage": 84.51443569553805,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4732,7 +4884,8 @@
         "combination_size": 3,
         "occurrence_count": 323,
         "percentage": 84.7769028871391,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4758,7 +4911,8 @@
         "combination_size": 3,
         "occurrence_count": 323,
         "percentage": 84.7769028871391,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4784,7 +4938,8 @@
         "combination_size": 3,
         "occurrence_count": 323,
         "percentage": 84.7769028871391,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4810,7 +4965,8 @@
         "combination_size": 3,
         "occurrence_count": 324,
         "percentage": 85.03937007874016,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4836,7 +4992,8 @@
         "combination_size": 3,
         "occurrence_count": 325,
         "percentage": 85.30183727034121,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4862,7 +5019,8 @@
         "combination_size": 3,
         "occurrence_count": 325,
         "percentage": 85.30183727034121,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4888,7 +5046,8 @@
         "combination_size": 3,
         "occurrence_count": 331,
         "percentage": 86.8766404199475,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       },
       {
         "events": [
@@ -4914,7 +5073,8 @@
         "combination_size": 3,
         "occurrence_count": 340,
         "percentage": 89.23884514435696,
-        "strategy": "by_event_type"
+        "strategy": "by_event_type",
+        "odds_info": null
       }
     ],
     "stats": {

@@ -14,9 +14,9 @@ class APIConfig:
 
 @dataclass
 class AnalysisConfig:
-    MIN_EVENTS_COMBINATION: int = 3
+    MIN_EVENTS_COMBINATION: int = 1
     MAX_EVENTS_COMBINATION: int = 5
-    MAX_RESULTS_PER_CATEGORY: int = 20
+    MAX_RESULTS_PER_CATEGORY: int = 381
     COMBINATION_STRATEGY: str = "by_event_type"  # "by_event_type", "by_market", "full"
     MIN_OCCURRENCE_THRESHOLD: float = 0.001  # 0.1%
     LEAGUES: List[str] = field(default_factory=lambda: [

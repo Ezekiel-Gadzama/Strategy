@@ -1,8 +1,6 @@
 from typing import List, Set, Tuple, Dict, Any
 from itertools import combinations
 import logging
-from data.models import Match
-
 
 class EventCombinationGenerator:
     def __init__(self, min_events: int = 3, max_events: int = 5):

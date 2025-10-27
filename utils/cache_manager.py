@@ -286,3 +286,4 @@ class OrganizedCacheManager:
         }
         self._save_cache()
         self.logger.info("Cleared all cache data")
+

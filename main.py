@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import List, Dict, Any
 import json
 
-from config.settings import Config
+from config.settings import Config, AnalysisConfig
 from clients.football_api import APIFootballClient
 from analyzers.pattern_analyzer import PatternAnalyzer
 from data.models import Match
@@ -146,12 +146,12 @@ class FootballDataAnalyzer:
         return matches
 
     def _print_results(self):
-        """Print comprehensive results for each league and season separately, grouped by combination size"""
+        """Print comprehensive results for each league and season separately"""
         print("\n" + "=" * 100)
         print("🎯 COMPREHENSIVE FOOTBALL EVENT PATTERN ANALYSIS RESULTS")
         print("=" * 100)
 
-        # Get all results from results manager
+        value_mode = self.pattern_analyzer.use_odd_info  # 👈 detect whether odds mode is active
         all_results = self.pattern_analyzer.results_manager.get_all_results()
 
         for league_id, league_data in all_results['leagues'].items():
@@ -164,135 +164,98 @@ class FootballDataAnalyzer:
                 print(f"📊 Matches analyzed: {season_data['total_matches_processed']}")
                 print(f"🔢 Combinations analyzed: {len(season_data['combos'])}")
 
-                # Show analysis results if available
-                if 'analysis_results' in season_data and season_data['analysis_results']:
-                    analysis = season_data['analysis_results']
+                analysis = season_data.get('analysis_results', {})
+                if not analysis:
+                    print("⚠️  No analysis results found.")
+                    continue
+
+                # ---------------------------------------------------------------------
+                # 💰 VALUE-BET MODE
+                # ---------------------------------------------------------------------
+                if value_mode:
+                    print("\n💰 VALUE BET MODE ACTIVE")
+                    print("───────────────────────────────────────────────────────────────")
+
+                    most_valuable = analysis.get('most_valuable', [])
+                    least_valuable = analysis.get('least_valuable', [])
                     stats = analysis.get('stats', {})
 
-                    print(f"\n📈 ANALYSIS STATISTICS:")
+                    print(f"\n📈 Total positive value bets found: {stats.get('total_value_bets', 0)}")
+                    print(f"   Highest value: {stats.get('highest_value', 0):.2f}%")
+                    print(f"   Lowest positive value: {stats.get('lowest_value', 0):.2f}%")
+
+                    # --- Most valuable ---
+                    print(f"\n💎 TOP {len(most_valuable)} MOST VALUABLE BETS:")
+                    print("───────────────────────────────────────────────────────────────")
+                    for i, combo in enumerate(most_valuable[:AnalysisConfig.MAX_RESULTS_PER_CATEGORY], 1):
+                        odds_info = combo.get('odds_info') or {}
+                        value = odds_info.get('value_indicator', 0)
+                        odds = odds_info.get('combined_odds', 0)
+                        occ = combo.get('occurrence_count', 0)
+                        pct = combo.get('percentage', 0)
+
+                        print(f"\n{i}. 💰 Value: +{value:.2f}% | Odds: {odds:.2f} | Occurred {occ}× ({pct:.2f}%)")
+                        for event in combo['events'][:3]:
+                            print(f"   📍 {event['description']} ({event['event_type']}, {event['market']})")
+
+                    # --- Least valuable ---
+                    print(f"\n📉 LOWEST POSITIVE VALUE BETS:")
+                    print("───────────────────────────────────────────────────────────────")
+                    for i, combo in enumerate(least_valuable[:10], 1):
+                        odds_info = combo.get('odds_info') or {}
+                        value = odds_info.get('value_indicator', 0)
+                        odds = odds_info.get('combined_odds', 0)
+                        occ = combo.get('occurrence_count', 0)
+                        pct = combo.get('percentage', 0)
+
+                        print(f"\n{i}. 💵 Value: +{value:.2f}% | Odds: {odds:.2f} | Occurred {occ}× ({pct:.2f}%)")
+                        for event in combo['events'][:3]:
+                            print(f"   📍 {event['description']} ({event['event_type']}, {event['market']})")
+
+                # ---------------------------------------------------------------------
+                # 📊 NORMAL (PATTERN OCCURRENCE) MODE
+                # ---------------------------------------------------------------------
+                else:
+                    print("\n📈 ANALYSIS STATISTICS:")
+                    stats = analysis.get('stats', {})
                     print(f"   Total combinations checked: {stats.get('total_combinations_checked', 0):,}")
                     print(f"   Valid combinations: {stats.get('valid_combinations_count', 0):,}")
                     print(f"   Never occurred: {stats.get('never_occurred_count', 0):,}")
                     print(f"   Occurred at least once: {stats.get('occurred_count', 0):,}")
+
                     if stats.get('occurred_count', 0) > 0:
                         print(
                             f"   Occurrence range: {stats.get('min_occurrence', 0)} - {stats.get('max_occurrence', 0)}")
                         print(f"   Average occurrence: {stats.get('avg_occurrence', 0):.2f}")
 
-                    # Process each combination size separately
+                    # Loop through combination sizes
                     organized_results = analysis.get('organized_results', {})
-
                     for combo_size in sorted(organized_results.keys()):
                         size_results = organized_results[combo_size]
-
-                        print(f"\n{'=' * 60}")
+                        print(f"\n{'=' * 80}")
                         print(f"🔢 COMBINATION SIZE: {combo_size} EVENTS")
-                        print(f"{'=' * 60}")
-
-                        # Never Occurred Combinations for this size
-                        print(f"\n🔍 NEVER OCCURRED COMBINATIONS ({combo_size} events):")
-                        print("-" * 50)
-
-                        never_occurred = size_results.get('never_occurred', [])
-                        if never_occurred:
-                            for i, combo in enumerate(never_occurred[:5], 1):
-                                print(f"\n{i}. Combination of {combo['combination_size']} events:")
-                                for event in combo['events']:
-                                    event_type = event.get('event_type', 'Unknown')
-                                    market = event.get('market', 'Unknown')
-                                    print(f"   📍 {event['description']}")
-                                    print(f"     Type: {event_type}, Market: {market}")
-                                print(f"   ❌ Occurrences: {combo['occurrence_count']} ({combo['percentage']:.4f}%)")
-                        else:
-                            print("   No never-occurred combinations found.")
-
-                        # Least Occurred Combinations for this size
-                        print(f"\n📉 LEAST OCCURRED COMBINATIONS ({combo_size} events):")
-                        print("-" * 50)
-
-                        least_occurred = size_results.get('least_occurred', [])
-                        if least_occurred:
-                            for i, combo in enumerate(least_occurred[:5], 1):
-                                print(f"\n{i}. Combination of {combo['combination_size']} events:")
-                                for event in combo['events']:
-                                    event_type = event.get('event_type', 'Unknown')
-                                    market = event.get('market', 'Unknown')
-                                    print(f"   📍 {event['description']}")
-                                    print(f"     Type: {event_type}, Market: {market}")
-                                print(f"   📊 Occurrences: {combo['occurrence_count']} ({combo['percentage']:.4f}%)")
-                        else:
-                            print("   No least-occurred combinations found.")
-
-                        # Most Occurred Combinations for this size
-                        print(f"\n📈 MOST OCCURRED COMBINATIONS ({combo_size} events):")
-                        print("-" * 50)
+                        print(f"{'=' * 80}")
 
                         most_occurred = size_results.get('most_occurred', [])
+                        least_occurred = size_results.get('least_occurred', [])
+
+                        # --- Most occurred ---
                         if most_occurred:
-                            for i, combo in enumerate(most_occurred[:5], 1):
-                                print(f"\n{i}. Combination of {combo['combination_size']} events:")
+                            print(f"\n📈 MOST OCCURRED COMBINATIONS:")
+                            for i, combo in enumerate(most_occurred[:AnalysisConfig.MAX_RESULTS_PER_CATEGORY], 1):
+                                print(f"\n{i}. {combo['occurrence_count']} occurrences ({combo['percentage']:.2f}%)")
                                 for event in combo['events']:
-                                    event_type = event.get('event_type', 'Unknown')
-                                    market = event.get('market', 'Unknown')
-                                    print(f"   📍 {event['description']}")
-                                    print(f"     Type: {event_type}, Market: {market}")
-                                print(f"   🎯 Occurrences: {combo['occurrence_count']} ({combo['percentage']:.4f}%)")
-                        else:
-                            print("   No most-occurred combinations found.")
+                                    print(f"   📍 {event['description']} ({event['event_type']}, {event['market']})")
 
-                        # Summary for this combination size
-                        print(f"\n📋 SUMMARY FOR {combo_size}-EVENT COMBINATIONS:")
-                        print("-" * 40)
-                        print(f"Total combinations: {size_results.get('total_combinations', 0)}")
-                        print(f"Never occurred: {size_results.get('never_occurred_count', 0)}")
-                        print(f"Occurred at least once: {size_results.get('occurred_count', 0)}")
+                        # --- Least occurred ---
+                        if least_occurred:
+                            print(f"\n📉 LEAST OCCURRED COMBINATIONS:")
+                            for i, combo in enumerate(least_occurred[:3], 1):
+                                print(f"\n{i}. {combo['occurrence_count']} occurrences ({combo['percentage']:.2f}%)")
+                                for event in combo['events']:
+                                    print(f"   📍 {event['description']} ({event['event_type']}, {event['market']})")
 
-                        if size_results.get('occurred_count', 0) > 0:
-                            occurred_combos = [c for c in least_occurred + most_occurred if c['occurrence_count'] > 0]
-                            if occurred_combos:
-                                min_occurrence = min(c['occurrence_count'] for c in occurred_combos)
-                                max_occurrence = max(c['occurrence_count'] for c in occurred_combos)
-                                print(f"Occurrence range: {min_occurrence} - {max_occurrence}")
-
-                    # Overall summary
-                    print(f"\n{'📋 ' + '-' * 38}")
-                    print("OVERALL SUMMARY")
-                    print("-" * 40)
-
-                    total_never = stats.get('never_occurred_count', 0)
-                    total_occurred = stats.get('occurred_count', 0)
-                    total_combinations = stats.get('total_combinations_checked', 0)
-
-                    print(f"Never occurred: {total_never} combinations")
-                    print(f"Occurred at least once: {total_occurred} combinations")
-
-                    if total_combinations > 0:
-                        never_percentage = (total_never / total_combinations) * 100
-                        print(f"Never occurred ratio: {never_percentage:.1f}%")
-
-                    # Find the most interesting patterns
-                    all_occurred = []
-                    for size_results in organized_results.values():
-                        all_occurred.extend(size_results.get('least_occurred', []))
-                        all_occurred.extend(size_results.get('most_occurred', []))
-
-                    if all_occurred:
-                        rarest = min(all_occurred, key=lambda x: x['occurrence_count'])
-                        most_common = max(all_occurred, key=lambda x: x['occurrence_count'])
-                        print(f"\n🎲 Rarest occurred pattern: {rarest['occurrence_count']} occurrence(s)")
-                        print(f"🏆 Most common pattern: {most_common['occurrence_count']} occurrence(s)")
-
-                # Show progress status if analysis is still in progress
-                progress = season_data['current_progress']
-                if progress['current_combination']:
-                    print(f"\n🔄 CURRENT PROGRESS:")
-                    print(f"   Combination size: {progress['combination_size']}")
-                    print(f"   Processed: {progress['processed_count']:,}/{progress['total_combinations']:,}")
-                    print(f"   Current combo: {progress['current_combination']}")
-
-                print("\n" + "─" * 60)
-
-        print(f"\n💾 Results saved to: comprehensive_results.json")
+        print("\n💾 Results saved to: comprehensive_results.json")
         print("=" * 100)
 
 

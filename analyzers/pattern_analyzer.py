@@ -1,5 +1,4 @@
-from datetime import datetime
-from typing import List, Dict, Any, Set, Tuple
+from typing import List, Dict, Any, Tuple
 from itertools import combinations
 from collections import defaultdict
 import logging
@@ -9,6 +8,7 @@ from data.models import Match
 from patterns.event_patterns import EventPatterns
 from config.settings import AnalysisConfig
 from utils.results_manager import ResultsManager
+from utils.odds_calculator import OddsCalculator
 
 
 class PatternAnalyzer:
@@ -18,10 +18,16 @@ class PatternAnalyzer:
         self.all_patterns = EventPatterns.get_all_patterns()
         self.results_manager = ResultsManager()
 
+        # Initialize odds calculator
+        self.odds_calculator = OddsCalculator()
+        # Toggle whether to use odds info in analysis
+        self.use_odd_info = True  # 👈 Added flag
+        self.max_length = 0
+
         print(f"length of pattern: {len(self.all_patterns)}")
 
         # Strategy options
-        self.combination_strategy = "by_event_type"  # "by_event_type", "by_market", "full"
+        self.combination_strategy = "full"  # "by_event_type", "by_market", "full"
 
         # Pre-organized patterns for faster access
         self._organize_patterns()
@@ -48,6 +54,34 @@ class PatternAnalyzer:
 
         self.logger.info(
             f"Organized {len(self.all_patterns)} patterns into {len(self.patterns_by_event_type)} event types")
+
+    # -------------------------------------------------------------------------
+    # --- ODDS HANDLING (conditional on self.use_odd_info)
+    # -------------------------------------------------------------------------
+    def _calculate_combination_odds(self, league_id: int, season: int,
+                                    combination: Tuple[str, ...],
+                                    occurrence_count: int,
+                                    total_matches: int) -> Dict[str, Any]:
+        """Calculate odds for a combination (conditionally uses odds info)"""
+        occurrence_probability = (occurrence_count / total_matches) * 100 if total_matches > 0 else 0.0
+
+        if not self.use_odd_info:
+            # 🔕 Skip odds calculations entirely
+            return {
+                "odds_calculated": False,
+                "implied_probability": occurrence_probability,
+                "combined_odds": None,
+                "expected_value": None
+            }
+
+        # ✅ Only run if odds are enabled
+        self.odds_calculator.get_latest_match_odds(league_id, season)
+        odds_result = self.odds_calculator.calculate_combination_odds(
+            combination, occurrence_probability
+        )
+
+        odds_result["odds_calculated"] = True
+        return odds_result
 
     def analyze_matches(self, matches: List[Match]) -> Dict[str, Any]:
         """Analyze matches league by league with comprehensive tracking"""
@@ -111,7 +145,7 @@ class PatternAnalyzer:
 
         # Save final results for this league/season - USE THE LAZY VERSION
         final_results = self._prepare_final_results_lazy(final_combinations_with_tuples, total_matches,
-                                                         valid_combinations_count)
+                                                         valid_combinations_count, league_id, season)
         self.results_manager.save_analysis_results(league_id, season, final_results)
 
         print(f"🎉 Analysis complete for {league_name} {season}")
@@ -271,9 +305,12 @@ class PatternAnalyzer:
             for product_rest in self._product(*rest):
                 yield (item,) + product_rest
 
-    def _process_combination_list(self, combinations: List[Tuple[Tuple[str, ...], int]], total_matches: int) -> List[
-        Dict]:
-        """Process a list of combinations into display-ready result items"""
+    # -------------------------------------------------------------------------
+    # --- COMBINATION PROCESSING (unchanged except odds condition)
+    # -------------------------------------------------------------------------
+    def _process_combination_list(self, combinations: List[Tuple[Tuple[str, ...], int]],
+                                  total_matches: int, league_id: int, season: int) -> List[Dict]:
+        """Process a list of combinations into display-ready result items (odds optional)"""
         processed = []
         for combo, count in combinations:
             pattern_details = []
@@ -287,85 +324,168 @@ class PatternAnalyzer:
                         'market': pattern.market
                     })
 
+            # ⚙️ Conditionally include odds info
+            if self.use_odd_info:
+                odds_info = self._calculate_combination_odds(league_id, season, combo, count, total_matches)
+            else:
+                odds_info = None
+
             processed.append({
                 'events': pattern_details,
                 'combination_size': len(combo),
                 'occurrence_count': count,
                 'percentage': (count / total_matches) * 100 if total_matches > 0 else 0.0,
-                'strategy': self.combination_strategy
+                'strategy': self.combination_strategy,
+                'odds_info': odds_info
             })
 
         return processed
 
-    def _prepare_final_results_lazy(self, combinations_dict: Dict[Tuple[str, ...], int], total_matches: int,
-                                    valid_combinations_count: int) -> Dict[str, Any]:
-        """Only process combinations that will be displayed in results - optimized version"""
-        # Group by size first
+    def _prepare_final_results_lazy(
+        self,
+        combinations_dict: Dict[Tuple[str, ...], int],
+        total_matches: int,
+        valid_combinations_count: int,
+        league_id: int,
+        season: int
+    ) -> Dict[str, Any]:
+        """Prepare final results. Behavior depends on use_odd_info mode:
+           - Normal mode: top/bottom by occurrence
+           - Odds mode: top/bottom by value bet % (and tie-break by frequency)
+        """
         combinations_by_size = defaultdict(list)
         for combo, count in combinations_dict.items():
             combinations_by_size[len(combo)].append((combo, count))
 
         organized_results = {}
-        all_occurred_candidates = []  # Store candidate combinations, not processed items
+        all_occurred_candidates = []
         all_never_occurred_candidates = []
 
-        for size in range(self.config.MIN_EVENTS_COMBINATION, self.config.MAX_EVENTS_COMBINATION + 1):
-            if size not in combinations_by_size:
-                organized_results[size] = self._get_empty_size_results()
-                continue
+        # ------------------------------------------------------------------
+        # --- NORMAL (pattern-frequency) MODE -------------------------------
+        # ------------------------------------------------------------------
+        if not self.use_odd_info:
+            for size in range(self.config.MIN_EVENTS_COMBINATION, self.config.MAX_EVENTS_COMBINATION + 1):
+                if size not in combinations_by_size:
+                    organized_results[size] = self._get_empty_size_results()
+                    continue
 
-            size_combinations = combinations_by_size[size]
+                size_combinations = combinations_by_size[size]
 
-            # Split into occurred and never occurred
-            occurred_combos = [(combo, count) for combo, count in size_combinations if count > 0]
-            never_occurred_combos = [(combo, count) for combo, count in size_combinations if count == 0]
+                occurred_combos = [(combo, count) for combo, count in size_combinations if count > 0]
+                never_occurred_combos = [(combo, count) for combo, count in size_combinations if count == 0]
 
-            # For occurred: only process the extremes (least and most occurred)
-            occurred_candidates = self._get_display_candidates(occurred_combos)
+                occurred_candidates = self._get_display_candidates(occurred_combos)
+                never_occurred_candidates = never_occurred_combos[:self.config.MAX_RESULTS_PER_CATEGORY]
 
-            # For never occurred: only process up to display limit
-            never_occurred_candidates = never_occurred_combos[:self.config.MAX_RESULTS_PER_CATEGORY]
+                processed_occurred = self._process_combination_list(
+                    occurred_candidates, total_matches, league_id, season
+                )
+                processed_never_occurred = self._process_combination_list(
+                    never_occurred_candidates, total_matches, league_id, season
+                )
 
-            # Process only the candidates
-            processed_occurred = self._process_combination_list(occurred_candidates, total_matches)
-            processed_never_occurred = self._process_combination_list(never_occurred_candidates, total_matches)
+                processed_occurred_sorted = sorted(processed_occurred, key=lambda x: x["occurrence_count"])
+                max_display = self.config.MAX_RESULTS_PER_CATEGORY
+                if self.use_odd_info:
+                    max_display = len(processed_occurred_sorted)
 
-            # Sort occurred combinations for final selection
-            processed_occurred_sorted = sorted(processed_occurred, key=lambda x: x['occurrence_count'])
+                organized_results[size] = {
+                    "never_occurred": processed_never_occurred[: self.config.MAX_RESULTS_PER_CATEGORY],
+                    "least_occurred": processed_occurred_sorted[: max_display],
+                    "most_occurred": list(
+                        reversed(processed_occurred_sorted[-max_display:])
+                    ),
+                    "total_combinations": len(size_combinations),
+                    "occurred_count": len(occurred_combos),
+                    "never_occurred_count": len(never_occurred_combos),
+                }
 
-            organized_results[size] = {
-                'never_occurred': processed_never_occurred[:self.config.MAX_RESULTS_PER_CATEGORY],
-                'least_occurred': processed_occurred_sorted[:self.config.MAX_RESULTS_PER_CATEGORY],
-                'most_occurred': list(reversed(processed_occurred_sorted[-self.config.MAX_RESULTS_PER_CATEGORY:])),
-                'total_combinations': len(size_combinations),
-                'occurred_count': len(occurred_combos),
-                'never_occurred_count': len(never_occurred_combos)
+                all_occurred_candidates.extend(occurred_candidates)
+                all_never_occurred_candidates.extend(never_occurred_candidates)
+
+            stats = self._calculate_stats_from_raw(all_occurred_candidates, all_never_occurred_candidates, total_matches)
+
+            overall_occurred = self._process_combination_list(
+                self._get_overall_display_candidates(all_occurred_candidates),
+                total_matches,
+                league_id,
+                season,
+            )
+            overall_never_occurred = self._process_combination_list(
+                all_never_occurred_candidates[: self.config.MAX_RESULTS_PER_CATEGORY],
+                total_matches,
+                league_id,
+                season,
+            )
+            max_display = self.config.MAX_RESULTS_PER_CATEGORY
+            if self.use_odd_info:
+                max_display = len(overall_occurred)
+            return {
+                "organized_results": organized_results,
+                "never_occurred": overall_never_occurred[: self.config.MAX_RESULTS_PER_CATEGORY],
+                "least_occurred": overall_occurred[: max_display],
+                "most_occurred": overall_occurred[-max_display:],
+                "stats": stats,
             }
 
-            # Store candidates for overall stats (we'll process them later if needed)
-            all_occurred_candidates.extend(occurred_candidates)
-            all_never_occurred_candidates.extend(never_occurred_candidates)
+        # ------------------------------------------------------------------
+        # --- ODDS (VALUE BET) MODE ----------------------------------------
+        # ------------------------------------------------------------------
+        else:
+            print("💰 Running in VALUE BET mode (use_odd_info=True)")
 
-        # Calculate stats using raw counts to avoid expensive processing
-        stats = self._calculate_stats_from_raw(all_occurred_candidates, all_never_occurred_candidates, total_matches)
+            value_results = []
+            for size, size_combos in combinations_by_size.items():
+                # process all to include odds info
+                processed = self._process_combination_list(size_combos, total_matches, league_id, season)
+                value_results.extend(processed)
 
-        # For the final display arrays, we need to process a small subset
-        overall_occurred = self._process_combination_list(
-            self._get_overall_display_candidates(all_occurred_candidates),
-            total_matches
-        )
-        overall_never_occurred = self._process_combination_list(
-            all_never_occurred_candidates[:self.config.MAX_RESULTS_PER_CATEGORY],
-            total_matches
-        )
+            # filter only combos that have valid positive value bets
+            valuable = [
+                combo
+                for combo in value_results
+                if combo.get("odds_info")
+                and combo["odds_info"].get("is_valuable", False)
+                and combo["odds_info"].get("value_indicator", 0) > 0
+            ]
 
-        return {
-            'organized_results': organized_results,
-            'never_occurred': overall_never_occurred[:self.config.MAX_RESULTS_PER_CATEGORY],
-            'least_occurred': overall_occurred[:self.config.MAX_RESULTS_PER_CATEGORY],
-            'most_occurred': overall_occurred[-self.config.MAX_RESULTS_PER_CATEGORY:],
-            'stats': stats
-        }
+            if not valuable:
+                print("⚠️ No value bets found in this dataset.")
+                return {"organized_results": {}, "most_valuable": [], "least_valuable": [], "stats": {}}
+
+            # sort by value indicator (highest first)
+            valuable.sort(
+                key=lambda x: (
+                    x["odds_info"].get("value_indicator", 0),
+                    x["occurrence_count"],  # tie-breaker by frequency
+                ),
+                reverse=True,
+            )
+
+            # top 20 highest-value bets
+
+            max_display = self.config.MAX_RESULTS_PER_CATEGORY
+            if self.use_odd_info:
+                max_display = len(valuable)
+
+            most_valuable = valuable[: max_display]
+
+            # bottom 20 lowest-value (but still >0) bets
+            least_valuable = sorted(
+                valuable, key=lambda x: (x["odds_info"].get("value_indicator", 0), -x["occurrence_count"])
+            )[: max_display]
+
+            return {
+                "organized_results": {},
+                "most_valuable": most_valuable,
+                "least_valuable": least_valuable,
+                "stats": {
+                    "total_value_bets": len(valuable),
+                    "highest_value": most_valuable[0]["odds_info"]["value_indicator"],
+                    "lowest_value": least_valuable[0]["odds_info"]["value_indicator"],
+                },
+            }
 
     def _get_display_candidates(self, combinations: List[Tuple[Tuple[str, ...], int]]) -> List[
         Tuple[Tuple[str, ...], int]]:
@@ -377,6 +497,9 @@ class PatternAnalyzer:
         combinations_sorted = sorted(combinations, key=lambda x: x[1])
 
         max_display = self.config.MAX_RESULTS_PER_CATEGORY
+        if self.use_odd_info:
+            max_display = len(combinations_sorted)
+
         # Take candidates from both ends (least and most occurred)
         candidates = (combinations_sorted[:max_display] +  # Least occurred
                       combinations_sorted[-max_display:])  # Most occurred
@@ -394,6 +517,9 @@ class PatternAnalyzer:
         combinations_sorted = sorted(combinations, key=lambda x: x[1])
 
         max_display = self.config.MAX_RESULTS_PER_CATEGORY * 2  # Get enough for both least and most
+        if self.use_odd_info:
+            max_display = len(combinations_sorted)
+
         # Take from both extremes
         candidates = (combinations_sorted[:max_display] +  # Least occurred
                       combinations_sorted[-max_display:])  # Most occurred
