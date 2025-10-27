@@ -77,52 +77,39 @@ class APIFootballClient:
             return matches_data
         return []
 
-    def get_match_events(self, match_id: int, league_id: int, season: int) -> List[Dict[str, Any]]:
-        """Get events for a specific match - check cache first"""
-        # Check if we have processed match data in organized cache
+    def get_match_details(self, match_id: int, league_id: int, season: int) -> Dict[str, Any]:
+        """Get both events and statistics for a match, handling cache properly"""
+        # Check if we have complete match data in cache
         match_details = self.cache.get_match_details(league_id, season, match_id)
-        if match_details and 'events' in match_details:
-            return match_details['events']
 
-        # If not in cache, make API request
-        params = {'fixture': match_id}
-        response = self._make_request("fixtures/events", params)
-        events_data = response.get("response", []) if response else []
+        needs_events = not match_details or 'events' not in match_details or not match_details['events']
+        needs_stats = not match_details or 'statistics' not in match_details or not match_details['statistics']
 
-        # Save events to organized cache
-        if events_data:
-            # Get existing statistics or empty list
-            existing_stats = []
-            if match_details and 'statistics' in match_details:
-                existing_stats = match_details['statistics']
+        # If we have both, return them
+        if not needs_events and not needs_stats:
+            return match_details
 
-            self.cache.save_match_details(league_id, season, match_id, events_data, existing_stats)
+        # Otherwise, fetch what we need
+        events_data = match_details.get('events', []) if match_details else []
+        stats_data = match_details.get('statistics', []) if match_details else []
 
-        return events_data
+        if needs_events:
+            params = {'fixture': match_id}
+            response = self._make_request("fixtures/events", params)
+            events_data = response.get("response", []) if response else []
 
-    def get_match_statistics(self, match_id: int, league_id: int, season: int) -> List[Dict[str, Any]]:
-        """Get statistics for a specific match - check cache first"""
-        # Check if we have processed match data in organized cache
-        match_details = self.cache.get_match_details(league_id, season, match_id)
-        if match_details and 'statistics' in match_details:
-            return match_details['statistics']
+        if needs_stats:
+            params = {'fixture': match_id}
+            response = self._make_request("fixtures/statistics", params)
+            stats_data = response.get("response", []) if response else []
 
-        # If not in cache, make API request
-        params = {'fixture': match_id}
-        response = self._make_request("fixtures/statistics", params)
-        stats_data = response.get("response", []) if response else []
+        # Save to cache
+        self.cache.save_match_details(league_id, season, match_id, events_data, stats_data)
 
-        # Save statistics to organized cache
-        if stats_data:
-            # Get existing events or empty list
-            existing_events = []
-            if match_details and 'events' in match_details:
-                existing_events = match_details['events']
-
-            self.cache.save_match_details(league_id, season, match_id, existing_events, stats_data)
-
-        return stats_data
-
+        return {
+            'events': events_data,
+            'statistics': stats_data
+        }
     def get_match_lineups(self, match_id: int) -> List[Dict[str, Any]]:
         """Get lineups for a specific match"""
         params = {'fixture': match_id}
@@ -169,18 +156,13 @@ class APIFootballClient:
             self._load_match_from_organized_cache(match, match_details)
             return
 
-        # Get match events using organized cache
-        events_data = self.get_match_events(match.id, match.league_id, match.season)
+        match_details = self.get_match_details(match.id, match.league_id, match.season)
+        events_data = match_details.get('events', [])
+        stats_data = match_details.get('statistics', [])
+
         self._process_events(match, events_data)
-
-        # Get match statistics using organized cache
-        stats_data = self.get_match_statistics(match.id, match.league_id, match.season)
         self._process_statistics(match, stats_data)
-
-        # Extract half-time statistics from events
         self._extract_half_stats(match, events_data)
-
-        # Generate derived events for pattern analysis
         self._generate_derived_events(match)
 
     def _load_match_from_organized_cache(self, match: Match, match_details: Dict[str, Any]):
