@@ -1,13 +1,15 @@
 from datetime import datetime
 from typing import List, Dict, Any, Set, Tuple
 from itertools import combinations
-from collections import defaultdict, Counter
+from collections import defaultdict
 import logging
 import concurrent.futures
+import threading
 from data.models import Match
 from patterns.event_patterns import EventPatterns
 from config.settings import AnalysisConfig
 from utils.results_manager import ResultsManager
+
 
 class PatternAnalyzer:
     def __init__(self, config: AnalysisConfig):
@@ -19,13 +21,17 @@ class PatternAnalyzer:
         print(f"length of pattern: {len(self.all_patterns)}")
 
         # Strategy options
-        self.combination_strategy = "by_event_type"
+        self.combination_strategy = "by_event_type"  # "by_event_type", "by_market", "full"
 
         # Pre-organized patterns for faster access
         self._organize_patterns()
 
         # Threading
         self.thread_count = config.THREAD_COUNT
+
+        # Global shared dictionary with thread lock
+        self.global_combinations_dict = {}
+        self.dict_lock = threading.Lock()
 
     def _organize_patterns(self):
         """Organize patterns in hierarchical structure for efficient combination generation"""
@@ -54,6 +60,9 @@ class PatternAnalyzer:
             self.logger.info(f"Analyzing {len(league_matches)} matches in {league_name} ({season})")
             print(f"🚀 Starting analysis for {league_name} {season} with {len(league_matches)} matches")
 
+            # Reset global dictionary for each league/season
+            self.global_combinations_dict = {}
+
             # Get all combinations analysis with optimized per-match approach
             all_combinations_analysis = self._analyze_matches_optimized(
                 league_matches, league_id, season, league_name
@@ -65,7 +74,7 @@ class PatternAnalyzer:
 
     def _analyze_matches_optimized(self, matches: List[Match], league_id: int, season: int, league_name: str) -> Dict[
         str, Any]:
-        """Optimized analysis that processes each batch independently and combines at the end"""
+        """Optimized analysis using global shared dictionary - no combining needed!"""
         total_matches = len(matches)
 
         # Initialize results for this league/season
@@ -74,9 +83,8 @@ class PatternAnalyzer:
         print(f"🎯 Processing {total_matches} matches for {league_name} {season}")
         print(f"🔢 Combination sizes: {self.config.MIN_EVENTS_COMBINATION} to {self.config.MAX_EVENTS_COMBINATION}")
 
-        # Process matches in batches for threading
+        # Process matches in batches using global dictionary
         batch_size = max(1, len(matches) // (self.thread_count * 2))
-        all_batch_results = []  # Store results from each batch
 
         batch_count = 0
         for batch_start in range(0, len(matches), batch_size):
@@ -86,64 +94,57 @@ class PatternAnalyzer:
 
             print(f"\n📊 Processing batch {batch_count}: matches {batch_start}-{batch_end} of {len(matches)}")
 
-            # Process this batch independently
-            batch_result = self._process_batch_independently(match_batch)
-            all_batch_results.append(batch_result)
+            # Process this batch - all threads write to global dictionary
+            self._process_batch_with_global_dict(match_batch)
 
-            print(f"✅ Batch {batch_count} complete: {len(batch_result)} unique combinations found")
+            print(f"✅ Batch {batch_count} complete: {len(self.global_combinations_dict)} unique combinations so far")
 
-        # Combine all batch results at the end
-        print(f"\n🔗 Combining results from {len(all_batch_results)} batches...")
-        final_combinations_counter = self._combine_batch_results(all_batch_results)
-        valid_combinations_count = sum(final_combinations_counter.values())
+        # No combining needed - we already have the final results in global_combinations_dict!
+        print(f"\n🎉 All batches processed")
+        valid_combinations_count = sum(self.global_combinations_dict.values())
 
-        # Save final results for this league/season
-        final_results = self._prepare_final_results(final_combinations_counter, total_matches, valid_combinations_count)
+        # Convert string keys back to tuples for final processing
+        final_combinations_with_tuples = {}
+        for combo_key, count in self.global_combinations_dict.items():
+            combo_tuple = tuple(combo_key.split("|"))
+            final_combinations_with_tuples[combo_tuple] = count
+
+        # Save final results for this league/season - USE THE LAZY VERSION
+        final_results = self._prepare_final_results_lazy(final_combinations_with_tuples, total_matches,
+                                                         valid_combinations_count)
         self.results_manager.save_analysis_results(league_id, season, final_results)
 
         print(f"🎉 Analysis complete for {league_name} {season}")
-        print(f"📊 Found {len(final_combinations_counter)} unique combinations across {total_matches} matches")
+        print(f"📊 Found {len(self.global_combinations_dict)} unique combinations across {total_matches} matches")
 
         return final_results
 
-    def _process_batch_independently(self, matches: List[Match]) -> Dict[Tuple[str, ...], int]:
-        """Process a batch of matches independently and return combination counts"""
+    def _process_batch_with_global_dict(self, matches: List[Match]):
+        """Process a batch with all threads writing to global dictionary"""
         # Split batch for threading
         sub_batches = [matches[i:i + max(1, len(matches) // self.thread_count)]
                        for i in range(0, len(matches), max(1, len(matches) // self.thread_count))]
 
-        batch_combinations = Counter()
-
         with concurrent.futures.ThreadPoolExecutor(max_workers=self.thread_count) as executor:
-            future_to_batch = {
-                executor.submit(self._analyze_match_batch, sub_batch): sub_batch
+            # Submit all sub-batches - they all write to the global dictionary
+            futures = [
+                executor.submit(self._analyze_match_batch_global, sub_batch)
                 for sub_batch in sub_batches if sub_batch
-            }
+            ]
 
-            for future in concurrent.futures.as_completed(future_to_batch):
+            # Wait for all to complete
+            for future in concurrent.futures.as_completed(futures):
                 try:
-                    sub_batch_result = future.result()
-                    # Combine sub-batch results into main batch counter
-                    for combo, count in sub_batch_result.items():
-                        batch_combinations[combo] += count
+                    future.result()  # Just wait for completion - results are in global dict
                 except Exception as e:
                     self.logger.error(f"Error processing sub-batch: {e}")
+                    import traceback
+                    self.logger.error(f"Detailed error: {traceback.format_exc()}")
 
-        return batch_combinations
-
-    def _combine_batch_results(self, all_batch_results: List[Dict[Tuple[str, ...], int]]) -> Counter:
-        """Combine results from all batches into a single counter"""
-        final_counter = Counter()
-
-        for batch_result in all_batch_results:
-            for combo, count in batch_result.items():
-                final_counter[combo] += count
-
-        return final_counter
-
-    def _analyze_match_batch(self, matches: List[Match]) -> Dict[Tuple[str, ...], int]:
-        """Analyze a batch of matches and return combination counts"""
-        batch_combinations = Counter()
+    def _analyze_match_batch_global(self, matches: List[Match]):
+        """Analyze a batch of matches and write directly to global dictionary"""
+        # Local batch dictionary to reduce lock contention
+        local_batch_dict = {}
 
         for match in matches:
             # Get patterns that occurred in this specific match
@@ -160,11 +161,15 @@ class PatternAnalyzer:
                 # Generate combinations using the selected strategy
                 combinations_for_match = self._generate_valid_combinations(occurring_patterns, size)
 
-                # Count each combination for this match
+                # Count each combination in local batch dictionary
                 for combo in combinations_for_match:
-                    batch_combinations[combo] += 1
+                    combo_key = "|".join(combo)  # Convert tuple to string
+                    local_batch_dict[combo_key] = local_batch_dict.get(combo_key, 0) + 1
 
-        return batch_combinations
+        # Merge local batch results into global dictionary (with lock)
+        with self.dict_lock:
+            for combo_key, count in local_batch_dict.items():
+                self.global_combinations_dict[combo_key] = self.global_combinations_dict.get(combo_key, 0) + count
 
     def _get_occurring_patterns_for_match(self, match: Match) -> List[str]:
         """Get list of pattern names that occurred in this specific match"""
@@ -266,46 +271,169 @@ class PatternAnalyzer:
             for product_rest in self._product(*rest):
                 yield (item,) + product_rest
 
-    def _prepare_final_results(self, combinations_counter: Counter, total_matches: int,
-                               valid_combinations_count: int) -> Dict[str, Any]:
-        """Prepare final results from the combinations counter"""
-        never_occurred = []
-        occurred = []
+    def _process_combination_list(self, combinations: List[Tuple[Tuple[str, ...], int]], total_matches: int) -> List[
+        Dict]:
+        """Process a list of combinations into display-ready result items"""
+        processed = []
+        for combo, count in combinations:
+            pattern_details = []
+            for name in combo:
+                if name in self.pattern_name_to_obj:
+                    pattern = self.pattern_name_to_obj[name]
+                    pattern_details.append({
+                        'name': pattern.name,
+                        'description': pattern.description,
+                        'event_type': pattern.event_type.value,
+                        'market': pattern.market
+                    })
 
-        for combo, count in combinations_counter.items():
-            pattern_details = [self.pattern_name_to_obj[name] for name in combo if name in self.pattern_name_to_obj]
-
-            result_item = {
-                'events': [{'name': p.name, 'description': p.description,
-                            'event_type': p.event_type.value, 'market': p.market}
-                           for p in pattern_details],
+            processed.append({
+                'events': pattern_details,
                 'combination_size': len(combo),
                 'occurrence_count': count,
                 'percentage': (count / total_matches) * 100 if total_matches > 0 else 0.0,
                 'strategy': self.combination_strategy
+            })
+
+        return processed
+
+    def _prepare_final_results_lazy(self, combinations_dict: Dict[Tuple[str, ...], int], total_matches: int,
+                                    valid_combinations_count: int) -> Dict[str, Any]:
+        """Only process combinations that will be displayed in results - optimized version"""
+        # Group by size first
+        combinations_by_size = defaultdict(list)
+        for combo, count in combinations_dict.items():
+            combinations_by_size[len(combo)].append((combo, count))
+
+        organized_results = {}
+        all_occurred_candidates = []  # Store candidate combinations, not processed items
+        all_never_occurred_candidates = []
+
+        for size in range(self.config.MIN_EVENTS_COMBINATION, self.config.MAX_EVENTS_COMBINATION + 1):
+            if size not in combinations_by_size:
+                organized_results[size] = self._get_empty_size_results()
+                continue
+
+            size_combinations = combinations_by_size[size]
+
+            # Split into occurred and never occurred
+            occurred_combos = [(combo, count) for combo, count in size_combinations if count > 0]
+            never_occurred_combos = [(combo, count) for combo, count in size_combinations if count == 0]
+
+            # For occurred: only process the extremes (least and most occurred)
+            occurred_candidates = self._get_display_candidates(occurred_combos)
+
+            # For never occurred: only process up to display limit
+            never_occurred_candidates = never_occurred_combos[:self.config.MAX_RESULTS_PER_CATEGORY]
+
+            # Process only the candidates
+            processed_occurred = self._process_combination_list(occurred_candidates, total_matches)
+            processed_never_occurred = self._process_combination_list(never_occurred_candidates, total_matches)
+
+            # Sort occurred combinations for final selection
+            processed_occurred_sorted = sorted(processed_occurred, key=lambda x: x['occurrence_count'])
+
+            organized_results[size] = {
+                'never_occurred': processed_never_occurred[:self.config.MAX_RESULTS_PER_CATEGORY],
+                'least_occurred': processed_occurred_sorted[:self.config.MAX_RESULTS_PER_CATEGORY],
+                'most_occurred': list(reversed(processed_occurred_sorted[-self.config.MAX_RESULTS_PER_CATEGORY:])),
+                'total_combinations': len(size_combinations),
+                'occurred_count': len(occurred_combos),
+                'never_occurred_count': len(never_occurred_combos)
             }
 
-            if count == 0:
-                never_occurred.append(result_item)
-            else:
-                occurred.append(result_item)
+            # Store candidates for overall stats (we'll process them later if needed)
+            all_occurred_candidates.extend(occurred_candidates)
+            all_never_occurred_candidates.extend(never_occurred_candidates)
 
-        # Sort occurred combinations
-        occurred_sorted = sorted(occurred, key=lambda x: x['occurrence_count'])
+        # Calculate stats using raw counts to avoid expensive processing
+        stats = self._calculate_stats_from_raw(all_occurred_candidates, all_never_occurred_candidates, total_matches)
 
-        stats = {
-            'total_combinations_checked': len(combinations_counter),
-            'valid_combinations_count': valid_combinations_count,
-            'never_occurred_count': len(never_occurred),
-            'occurred_count': len(occurred),
-            'min_occurrence': min([x['occurrence_count'] for x in occurred]) if occurred else 0,
-            'max_occurrence': max([x['occurrence_count'] for x in occurred]) if occurred else 0,
-            'avg_occurrence': sum([x['occurrence_count'] for x in occurred]) / len(occurred) if occurred else 0
-        }
+        # For the final display arrays, we need to process a small subset
+        overall_occurred = self._process_combination_list(
+            self._get_overall_display_candidates(all_occurred_candidates),
+            total_matches
+        )
+        overall_never_occurred = self._process_combination_list(
+            all_never_occurred_candidates[:self.config.MAX_RESULTS_PER_CATEGORY],
+            total_matches
+        )
 
         return {
-            'never_occurred': never_occurred[:self.config.MAX_RESULTS_PER_CATEGORY],
-            'least_occurred': occurred_sorted[:self.config.MAX_RESULTS_PER_CATEGORY],
-            'most_occurred': list(reversed(occurred_sorted[-self.config.MAX_RESULTS_PER_CATEGORY:])),
+            'organized_results': organized_results,
+            'never_occurred': overall_never_occurred[:self.config.MAX_RESULTS_PER_CATEGORY],
+            'least_occurred': overall_occurred[:self.config.MAX_RESULTS_PER_CATEGORY],
+            'most_occurred': overall_occurred[-self.config.MAX_RESULTS_PER_CATEGORY:],
             'stats': stats
+        }
+
+    def _get_display_candidates(self, combinations: List[Tuple[Tuple[str, ...], int]]) -> List[
+        Tuple[Tuple[str, ...], int]]:
+        """Get candidate combinations for display (extremes only)"""
+        if not combinations:
+            return []
+
+        # Sort by occurrence count to find extremes
+        combinations_sorted = sorted(combinations, key=lambda x: x[1])
+
+        max_display = self.config.MAX_RESULTS_PER_CATEGORY
+        # Take candidates from both ends (least and most occurred)
+        candidates = (combinations_sorted[:max_display] +  # Least occurred
+                      combinations_sorted[-max_display:])  # Most occurred
+
+        # Remove duplicates and return
+        return list(dict.fromkeys(candidates))  # Preserves order while removing duplicates
+
+    def _get_overall_display_candidates(self, combinations: List[Tuple[Tuple[str, ...], int]]) -> List[
+        Tuple[Tuple[str, ...], int]]:
+        """Get overall display candidates across all sizes"""
+        if not combinations:
+            return []
+
+        # Sort by occurrence count
+        combinations_sorted = sorted(combinations, key=lambda x: x[1])
+
+        max_display = self.config.MAX_RESULTS_PER_CATEGORY * 2  # Get enough for both least and most
+        # Take from both extremes
+        candidates = (combinations_sorted[:max_display] +  # Least occurred
+                      combinations_sorted[-max_display:])  # Most occurred
+
+        return list(dict.fromkeys(candidates))
+
+    def _calculate_stats_from_raw(self, occurred_candidates: List[Tuple[Tuple[str, ...], int]],
+                                  never_occurred_candidates: List[Tuple[Tuple[str, ...], int]],
+                                  total_matches: int) -> Dict:
+        """Calculate statistics from raw combination data (no processing needed)"""
+        if not occurred_candidates:
+            return {
+                'total_combinations_checked': len(occurred_candidates) + len(never_occurred_candidates),
+                'valid_combinations_count': 0,
+                'never_occurred_count': len(never_occurred_candidates),
+                'occurred_count': 0,
+                'min_occurrence': 0,
+                'max_occurrence': 0,
+                'avg_occurrence': 0
+            }
+
+        # Extract just the counts for statistics
+        occurrences = [count for _, count in occurred_candidates]
+        return {
+            'total_combinations_checked': len(occurred_candidates) + len(never_occurred_candidates),
+            'valid_combinations_count': sum(occurrences),
+            'never_occurred_count': len(never_occurred_candidates),
+            'occurred_count': len(occurred_candidates),
+            'min_occurrence': min(occurrences),
+            'max_occurrence': max(occurrences),
+            'avg_occurrence': sum(occurrences) / len(occurred_candidates)
+        }
+
+    def _get_empty_size_results(self) -> Dict[str, Any]:
+        """Return empty results structure for a size with no combinations"""
+        return {
+            'never_occurred': [],
+            'least_occurred': [],
+            'most_occurred': [],
+            'total_combinations': 0,
+            'occurred_count': 0,
+            'never_occurred_count': 0
         }

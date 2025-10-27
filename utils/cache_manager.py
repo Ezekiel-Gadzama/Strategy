@@ -1,6 +1,7 @@
 import json
 import os
 import hashlib
+import time
 from typing import Dict, Any, Optional, List
 from datetime import datetime
 import logging
@@ -21,7 +22,7 @@ class OrganizedCacheManager:
             os.makedirs(self.cache_dir)
 
     def _load_cache(self):
-        """Load the organized cache from file"""
+        """Load the organized cache from file with backup recovery"""
         if not os.path.exists(self.cache_file):
             self.cache_data = {
                 'leagues': {},
@@ -33,22 +34,96 @@ class OrganizedCacheManager:
                 }
             }
             self._save_cache()
-        else:
-            try:
-                with open(self.cache_file, 'r', encoding='utf-8') as f:
-                    self.cache_data = json.load(f)
-                self.logger.info("Loaded organized cache from file")
-            except (json.JSONDecodeError, KeyError) as e:
-                self.logger.warning(f"Failed to load cache, creating new: {e}")
-                self.cache_data = {
-                    'leagues': {},
-                    'metadata': {
-                        'created_at': datetime.now().isoformat(),
-                        'last_updated': datetime.now().isoformat(),
-                        'total_matches': 0,
-                        'total_leagues': 0
+            return
+
+        # Try to load main cache file first
+        try:
+            with open(self.cache_file, 'r', encoding='utf-8') as f:
+                self.cache_data = json.load(f)
+            self.logger.info("Loaded organized cache from file")
+        except (json.JSONDecodeError, KeyError) as e:
+            self.logger.warning(f"Failed to load cache, creating new: {e}")
+            # If main cache fails, try to load from backup
+            backup_file = self.cache_file + '.backup'
+            if os.path.exists(backup_file):
+                try:
+                    self.logger.info("Attempting to restore from backup...")
+                    print("Attempting to restore from backup...")
+                    with open(backup_file, 'r', encoding='utf-8') as f:
+                        backup_data = json.load(f)
+
+                    # Restore backup to main file
+                    with open(self.cache_file, 'w', encoding='utf-8') as f:
+                        json.dump(backup_data, f, indent=2, ensure_ascii=False)
+
+                    with open(self.cache_file, 'r', encoding='utf-8') as f:
+                        self.cache_data = json.load(f)
+
+                    self.logger.info("✅ Successfully restored cache from backup")
+                    print("✅ Successfully restored cache from backup")
+
+
+                except (json.JSONDecodeError, KeyError, UnicodeDecodeError) as e:
+                    self.logger.warning(f"Failed to load backup cache: {e}")
+                    self.logger.warning("Both main cache and backup are corrupted, creating new cache")
+                    self.cache_data = {
+                        'leagues': {},
+                        'metadata': {
+                            'created_at': datetime.now().isoformat(),
+                            'last_updated': datetime.now().isoformat(),
+                            'total_matches': 0,
+                            'total_leagues': 0
+                        }
                     }
-                }
+
+        self._save_cache()
+
+    def _validate_cache_data(self, cache_data: Dict[str, Any]) -> bool:
+        """Validate cache data structure"""
+        try:
+            # Check required top-level keys
+            if 'leagues' not in cache_data or 'metadata' not in cache_data:
+                return False
+
+            # Check metadata structure
+            metadata = cache_data['metadata']
+            required_metadata = ['created_at', 'last_updated', 'total_matches', 'total_leagues']
+            if not all(key in metadata for key in required_metadata):
+                return False
+
+            # Check leagues structure
+            leagues = cache_data['leagues']
+            if not isinstance(leagues, dict):
+                return False
+
+            # Validate each league
+            for league_id, league_data in leagues.items():
+                if not isinstance(league_data, dict):
+                    return False
+                if 'seasons' not in league_data or 'info' not in league_data:
+                    return False
+                if not isinstance(league_data['seasons'], dict):
+                    return False
+
+                # Validate seasons
+                for season_key, season_data in league_data['seasons'].items():
+                    if not isinstance(season_data, dict) or 'matches' not in season_data:
+                        return False
+                    if not isinstance(season_data['matches'], dict):
+                        return False
+
+                    # Validate matches
+                    for match_key, match_data in season_data['matches'].items():
+                        if not isinstance(match_data, dict):
+                            return False
+                        if 'basic_info' not in match_data or 'fixture_data' not in match_data:
+                            return False
+
+            return True
+
+        except Exception as e:
+            self.logger.warning(f"Cache validation error: {e}")
+            return False
 
     def _save_cache(self):
         """Save the organized cache to file"""

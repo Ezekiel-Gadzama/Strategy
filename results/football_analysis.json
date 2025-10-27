@@ -1,0 +1,3408 @@
+{
+  "Serie A_2022": {
+    "organized_results": {
+      "3": {
+        "never_occurred": [],
+        "least_occurred": [
+          {
+            "events": [
+              {
+                "name": "total_goals_5_plus",
+                "description": "Total goals \u2265 5",
+                "event_type": "goals",
+                "market": "total_goals_exact"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "first_half_under_1_5",
+                "description": "First half goals under 1.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_4_5_goals",
+                "description": "Total goals over 4.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "first_half_under_1_5",
+                "description": "First half goals under 1.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "goal_bounds_5_plus",
+                "description": "Goal bounds: 5+ goals",
+                "event_type": "goals",
+                "market": "goal_bounds"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "first_half_under_1_5",
+                "description": "First half goals under 1.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "multigoals_5_6",
+                "description": "Multigoals: 5-6 goals",
+                "event_type": "goals",
+                "market": "multigoals"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "first_half_under_1_5",
+                "description": "First half goals under 1.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "total_goals_5_plus",
+                "description": "Total goals \u2265 5",
+                "event_type": "goals",
+                "market": "total_goals_exact"
+              },
+              {
+                "name": "away_win",
+                "description": "Away team wins",
+                "event_type": "team_stats",
+                "market": "1x2"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "total_goals_5_plus",
+                "description": "Total goals \u2265 5",
+                "event_type": "goals",
+                "market": "total_goals_exact"
+              },
+              {
+                "name": "away_win_dnb",
+                "description": "Away win (draw no bet)",
+                "event_type": "team_stats",
+                "market": "draw_no_bet"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "total_goals_5_plus",
+                "description": "Total goals \u2265 5",
+                "event_type": "goals",
+                "market": "total_goals_exact"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "total_goals_5_plus",
+                "description": "Total goals \u2265 5",
+                "event_type": "goals",
+                "market": "total_goals_exact"
+              },
+              {
+                "name": "home_no_bet_away",
+                "description": "Home no bet: Away",
+                "event_type": "team_stats",
+                "market": "home_no_bet"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_4_5_goals",
+                "description": "Total goals over 4.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "away_win",
+                "description": "Away team wins",
+                "event_type": "team_stats",
+                "market": "1x2"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_4_5_goals",
+                "description": "Total goals over 4.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "away_win_dnb",
+                "description": "Away win (draw no bet)",
+                "event_type": "team_stats",
+                "market": "draw_no_bet"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_4_5_goals",
+                "description": "Total goals over 4.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_4_5_goals",
+                "description": "Total goals over 4.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "home_no_bet_away",
+                "description": "Home no bet: Away",
+                "event_type": "team_stats",
+                "market": "home_no_bet"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_5_5_goals",
+                "description": "Total goals over 5.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "away_win",
+                "description": "Away team wins",
+                "event_type": "team_stats",
+                "market": "1x2"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_5_5_goals",
+                "description": "Total goals over 5.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_5_5_goals",
+                "description": "Total goals over 5.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "away_win_dnb",
+                "description": "Away win (draw no bet)",
+                "event_type": "team_stats",
+                "market": "draw_no_bet"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_5_5_goals",
+                "description": "Total goals over 5.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_5_5_goals",
+                "description": "Total goals over 5.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "home_no_bet_away",
+                "description": "Home no bet: Away",
+                "event_type": "team_stats",
+                "market": "home_no_bet"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "home_over_1_5",
+                "description": "Home team over 1.5 goals",
+                "event_type": "goals",
+                "market": "team_total_goals_home"
+              },
+              {
+                "name": "away_win",
+                "description": "Away team wins",
+                "event_type": "team_stats",
+                "market": "1x2"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "home_over_1_5",
+                "description": "Home team over 1.5 goals",
+                "event_type": "goals",
+                "market": "team_total_goals_home"
+              },
+              {
+                "name": "away_win_dnb",
+                "description": "Away win (draw no bet)",
+                "event_type": "team_stats",
+                "market": "draw_no_bet"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "home_over_1_5",
+                "description": "Home team over 1.5 goals",
+                "event_type": "goals",
+                "market": "team_total_goals_home"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          }
+        ],
+        "most_occurred": [
+          {
+            "events": [
+              {
+                "name": "under_5_5_goals",
+                "description": "Total goals under 5.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 343,
+            "percentage": 90.02624671916011,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "under_5_5_goals",
+                "description": "Total goals under 5.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 343,
+            "percentage": 90.02624671916011,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "btts_both_halves_no",
+                "description": "Not both teams score in both halves",
+                "event_type": "goals",
+                "market": "btts_both_halves"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 334,
+            "percentage": 87.66404199475065,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "btts_both_halves_no",
+                "description": "Not both teams score in both halves",
+                "event_type": "goals",
+                "market": "btts_both_halves"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 334,
+            "percentage": 87.66404199475065,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "excluded_goals_5_plus",
+                "description": "Excluded: 5+ goals",
+                "event_type": "goals",
+                "market": "excluded_goals"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 328,
+            "percentage": 86.08923884514435,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "excluded_goals_5_plus",
+                "description": "Excluded: 5+ goals",
+                "event_type": "goals",
+                "market": "excluded_goals"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 328,
+            "percentage": 86.08923884514435,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "under_4_5_goals",
+                "description": "Total goals under 4.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 328,
+            "percentage": 86.08923884514435,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "under_4_5_goals",
+                "description": "Total goals under 4.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 328,
+            "percentage": 86.08923884514435,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "excluded_goals_0",
+                "description": "Excluded: 0 goals",
+                "event_type": "goals",
+                "market": "excluded_goals"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 326,
+            "percentage": 85.56430446194226,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "excluded_goals_0",
+                "description": "Excluded: 0 goals",
+                "event_type": "goals",
+                "market": "excluded_goals"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 326,
+            "percentage": 85.56430446194226,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_0_5_goals",
+                "description": "Total goals over 0.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 326,
+            "percentage": 85.56430446194226,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_0_5_goals",
+                "description": "Total goals over 0.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 326,
+            "percentage": 85.56430446194226,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "multigoals_1_4",
+                "description": "Multigoals: 1-4 goals",
+                "event_type": "goals",
+                "market": "multigoals"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 308,
+            "percentage": 80.83989501312337,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "multigoals_1_4",
+                "description": "Multigoals: 1-4 goals",
+                "event_type": "goals",
+                "market": "multigoals"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 308,
+            "percentage": 80.83989501312337,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "btts_both_halves_no",
+                "description": "Not both teams score in both halves",
+                "event_type": "goals",
+                "market": "btts_both_halves"
+              },
+              {
+                "name": "first_half_btts_no",
+                "description": "Not both teams score in first half",
+                "event_type": "half_stats",
+                "market": "first_half_btts"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 307,
+            "percentage": 80.5774278215223,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "btts_both_halves_no",
+                "description": "Not both teams score in both halves",
+                "event_type": "goals",
+                "market": "btts_both_halves"
+              },
+              {
+                "name": "first_half_btts_no",
+                "description": "Not both teams score in first half",
+                "event_type": "half_stats",
+                "market": "first_half_btts"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 307,
+            "percentage": 80.5774278215223,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "under_5_5_goals",
+                "description": "Total goals under 5.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "first_half_btts_no",
+                "description": "Not both teams score in first half",
+                "event_type": "half_stats",
+                "market": "first_half_btts"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 303,
+            "percentage": 79.52755905511812,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "under_5_5_goals",
+                "description": "Total goals under 5.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "first_half_btts_no",
+                "description": "Not both teams score in first half",
+                "event_type": "half_stats",
+                "market": "first_half_btts"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 303,
+            "percentage": 79.52755905511812,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "excluded_goals_0",
+                "description": "Excluded: 0 goals",
+                "event_type": "goals",
+                "market": "excluded_goals"
+              },
+              {
+                "name": "second_half_over_0_5",
+                "description": "Second half goals over 0.5",
+                "event_type": "half_stats",
+                "market": "second_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 303,
+            "percentage": 79.52755905511812,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "excluded_goals_0",
+                "description": "Excluded: 0 goals",
+                "event_type": "goals",
+                "market": "excluded_goals"
+              },
+              {
+                "name": "second_half_over_0_5",
+                "description": "Second half goals over 0.5",
+                "event_type": "half_stats",
+                "market": "second_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 3,
+            "occurrence_count": 303,
+            "percentage": 79.52755905511812,
+            "strategy": "by_event_type"
+          }
+        ],
+        "total_combinations": 46066,
+        "occurred_count": 46066,
+        "never_occurred_count": 0
+      },
+      "4": {
+        "never_occurred": [],
+        "least_occurred": [
+          {
+            "events": [
+              {
+                "name": "total_goals_5_plus",
+                "description": "Total goals \u2265 5",
+                "event_type": "goals",
+                "market": "total_goals_exact"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "first_half_under_1_5",
+                "description": "First half goals under 1.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "total_goals_5_plus",
+                "description": "Total goals \u2265 5",
+                "event_type": "goals",
+                "market": "total_goals_exact"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "first_half_under_1_5",
+                "description": "First half goals under 1.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_4_5_goals",
+                "description": "Total goals over 4.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "first_half_under_1_5",
+                "description": "First half goals under 1.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_4_5_goals",
+                "description": "Total goals over 4.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "first_half_under_1_5",
+                "description": "First half goals under 1.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "goal_bounds_5_plus",
+                "description": "Goal bounds: 5+ goals",
+                "event_type": "goals",
+                "market": "goal_bounds"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "first_half_under_1_5",
+                "description": "First half goals under 1.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "goal_bounds_5_plus",
+                "description": "Goal bounds: 5+ goals",
+                "event_type": "goals",
+                "market": "goal_bounds"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "first_half_under_1_5",
+                "description": "First half goals under 1.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "multigoals_5_6",
+                "description": "Multigoals: 5-6 goals",
+                "event_type": "goals",
+                "market": "multigoals"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "first_half_under_1_5",
+                "description": "First half goals under 1.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "multigoals_5_6",
+                "description": "Multigoals: 5-6 goals",
+                "event_type": "goals",
+                "market": "multigoals"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "first_half_under_1_5",
+                "description": "First half goals under 1.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "total_goals_5_plus",
+                "description": "Total goals \u2265 5",
+                "event_type": "goals",
+                "market": "total_goals_exact"
+              },
+              {
+                "name": "away_win",
+                "description": "Away team wins",
+                "event_type": "team_stats",
+                "market": "1x2"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "total_goals_5_plus",
+                "description": "Total goals \u2265 5",
+                "event_type": "goals",
+                "market": "total_goals_exact"
+              },
+              {
+                "name": "away_win",
+                "description": "Away team wins",
+                "event_type": "team_stats",
+                "market": "1x2"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "total_goals_5_plus",
+                "description": "Total goals \u2265 5",
+                "event_type": "goals",
+                "market": "total_goals_exact"
+              },
+              {
+                "name": "away_win_dnb",
+                "description": "Away win (draw no bet)",
+                "event_type": "team_stats",
+                "market": "draw_no_bet"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "total_goals_5_plus",
+                "description": "Total goals \u2265 5",
+                "event_type": "goals",
+                "market": "total_goals_exact"
+              },
+              {
+                "name": "away_win_dnb",
+                "description": "Away win (draw no bet)",
+                "event_type": "team_stats",
+                "market": "draw_no_bet"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "total_goals_5_plus",
+                "description": "Total goals \u2265 5",
+                "event_type": "goals",
+                "market": "total_goals_exact"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "total_goals_5_plus",
+                "description": "Total goals \u2265 5",
+                "event_type": "goals",
+                "market": "total_goals_exact"
+              },
+              {
+                "name": "away_away",
+                "description": "Away/Away (HT/FT)",
+                "event_type": "team_stats",
+                "market": "halftime_fulltime"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "total_goals_5_plus",
+                "description": "Total goals \u2265 5",
+                "event_type": "goals",
+                "market": "total_goals_exact"
+              },
+              {
+                "name": "home_no_bet_away",
+                "description": "Home no bet: Away",
+                "event_type": "team_stats",
+                "market": "home_no_bet"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "total_goals_5_plus",
+                "description": "Total goals \u2265 5",
+                "event_type": "goals",
+                "market": "total_goals_exact"
+              },
+              {
+                "name": "home_no_bet_away",
+                "description": "Home no bet: Away",
+                "event_type": "team_stats",
+                "market": "home_no_bet"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_4_5_goals",
+                "description": "Total goals over 4.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "away_win",
+                "description": "Away team wins",
+                "event_type": "team_stats",
+                "market": "1x2"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_4_5_goals",
+                "description": "Total goals over 4.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "away_win",
+                "description": "Away team wins",
+                "event_type": "team_stats",
+                "market": "1x2"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_4_5_goals",
+                "description": "Total goals over 4.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "away_win_dnb",
+                "description": "Away win (draw no bet)",
+                "event_type": "team_stats",
+                "market": "draw_no_bet"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_4_5_goals",
+                "description": "Total goals over 4.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "away_win_dnb",
+                "description": "Away win (draw no bet)",
+                "event_type": "team_stats",
+                "market": "draw_no_bet"
+              },
+              {
+                "name": "second_half_draw",
+                "description": "Second half: Draw",
+                "event_type": "half_stats",
+                "market": "second_half_1x2"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 1,
+            "percentage": 0.26246719160104987,
+            "strategy": "by_event_type"
+          }
+        ],
+        "most_occurred": [
+          {
+            "events": [
+              {
+                "name": "excluded_goals_0",
+                "description": "Excluded: 0 goals",
+                "event_type": "goals",
+                "market": "excluded_goals"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 253,
+            "percentage": 66.40419947506561,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "excluded_goals_0",
+                "description": "Excluded: 0 goals",
+                "event_type": "goals",
+                "market": "excluded_goals"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 253,
+            "percentage": 66.40419947506561,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_0_5_goals",
+                "description": "Total goals over 0.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 253,
+            "percentage": 66.40419947506561,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_0_5_goals",
+                "description": "Total goals over 0.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 253,
+            "percentage": 66.40419947506561,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "under_5_5_goals",
+                "description": "Total goals under 5.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 251,
+            "percentage": 65.87926509186352,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "under_5_5_goals",
+                "description": "Total goals under 5.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 251,
+            "percentage": 65.87926509186352,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "btts_both_halves_no",
+                "description": "Not both teams score in both halves",
+                "event_type": "goals",
+                "market": "btts_both_halves"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 248,
+            "percentage": 65.09186351706036,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "btts_both_halves_no",
+                "description": "Not both teams score in both halves",
+                "event_type": "goals",
+                "market": "btts_both_halves"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 248,
+            "percentage": 65.09186351706036,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "multigoals_1_4",
+                "description": "Multigoals: 1-4 goals",
+                "event_type": "goals",
+                "market": "multigoals"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 236,
+            "percentage": 61.942257217847775,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "multigoals_1_4",
+                "description": "Multigoals: 1-4 goals",
+                "event_type": "goals",
+                "market": "multigoals"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 236,
+            "percentage": 61.942257217847775,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "excluded_goals_5_plus",
+                "description": "Excluded: 5+ goals",
+                "event_type": "goals",
+                "market": "excluded_goals"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 236,
+            "percentage": 61.942257217847775,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "excluded_goals_5_plus",
+                "description": "Excluded: 5+ goals",
+                "event_type": "goals",
+                "market": "excluded_goals"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 236,
+            "percentage": 61.942257217847775,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "under_4_5_goals",
+                "description": "Total goals under 4.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 236,
+            "percentage": 61.942257217847775,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "under_4_5_goals",
+                "description": "Total goals under 4.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 236,
+            "percentage": 61.942257217847775,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "excluded_goals_0",
+                "description": "Excluded: 0 goals",
+                "event_type": "goals",
+                "market": "excluded_goals"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "second_half_over_0_5",
+                "description": "Second half goals over 0.5",
+                "event_type": "half_stats",
+                "market": "second_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 236,
+            "percentage": 61.942257217847775,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "excluded_goals_0",
+                "description": "Excluded: 0 goals",
+                "event_type": "goals",
+                "market": "excluded_goals"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "second_half_over_0_5",
+                "description": "Second half goals over 0.5",
+                "event_type": "half_stats",
+                "market": "second_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 236,
+            "percentage": 61.942257217847775,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_0_5_goals",
+                "description": "Total goals over 0.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "second_half_over_0_5",
+                "description": "Second half goals over 0.5",
+                "event_type": "half_stats",
+                "market": "second_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 236,
+            "percentage": 61.942257217847775,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "over_0_5_goals",
+                "description": "Total goals over 0.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "home_or_away",
+                "description": "Home win or away win",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "second_half_over_0_5",
+                "description": "Second half goals over 0.5",
+                "event_type": "half_stats",
+                "market": "second_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 236,
+            "percentage": 61.942257217847775,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "under_5_5_goals",
+                "description": "Total goals under 5.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "home_or_draw",
+                "description": "Home win or draw",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corners_even",
+                "description": "Total corners even",
+                "event_type": "corners",
+                "market": "odd_even_corners"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 233,
+            "percentage": 61.15485564304461,
+            "strategy": "by_event_type"
+          },
+          {
+            "events": [
+              {
+                "name": "under_5_5_goals",
+                "description": "Total goals under 5.5",
+                "event_type": "goals",
+                "market": "total_goals_over_under"
+              },
+              {
+                "name": "home_or_draw",
+                "description": "Home win or draw",
+                "event_type": "team_stats",
+                "market": "double_chance"
+              },
+              {
+                "name": "first_half_under_2_5",
+                "description": "First half goals under 2.5",
+                "event_type": "half_stats",
+                "market": "first_half_over_under"
+              },
+              {
+                "name": "corner_range_0_8",
+                "description": "Corner range 0-8",
+                "event_type": "corners",
+                "market": "corner_range"
+              }
+            ],
+            "combination_size": 4,
+            "occurrence_count": 233,
+            "percentage": 61.15485564304461,
+            "strategy": "by_event_type"
+          }
+        ],
+        "total_combinations": 73164,
+        "occurred_count": 73164,
+        "never_occurred_count": 0
+      },
+      "5": {
+        "never_occurred": [],
+        "least_occurred": [],
+        "most_occurred": [],
+        "total_combinations": 0,
+        "occurred_count": 0,
+        "never_occurred_count": 0
+      }
+    },
+    "never_occurred": [],
+    "least_occurred": [
+      {
+        "events": [
+          {
+            "name": "total_goals_5_plus",
+            "description": "Total goals \u2265 5",
+            "event_type": "goals",
+            "market": "total_goals_exact"
+          },
+          {
+            "name": "away_away",
+            "description": "Away/Away (HT/FT)",
+            "event_type": "team_stats",
+            "market": "halftime_fulltime"
+          },
+          {
+            "name": "first_half_under_1_5",
+            "description": "First half goals under 1.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "over_4_5_goals",
+            "description": "Total goals over 4.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "away_away",
+            "description": "Away/Away (HT/FT)",
+            "event_type": "team_stats",
+            "market": "halftime_fulltime"
+          },
+          {
+            "name": "first_half_under_1_5",
+            "description": "First half goals under 1.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "goal_bounds_5_plus",
+            "description": "Goal bounds: 5+ goals",
+            "event_type": "goals",
+            "market": "goal_bounds"
+          },
+          {
+            "name": "away_away",
+            "description": "Away/Away (HT/FT)",
+            "event_type": "team_stats",
+            "market": "halftime_fulltime"
+          },
+          {
+            "name": "first_half_under_1_5",
+            "description": "First half goals under 1.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "multigoals_5_6",
+            "description": "Multigoals: 5-6 goals",
+            "event_type": "goals",
+            "market": "multigoals"
+          },
+          {
+            "name": "away_away",
+            "description": "Away/Away (HT/FT)",
+            "event_type": "team_stats",
+            "market": "halftime_fulltime"
+          },
+          {
+            "name": "first_half_under_1_5",
+            "description": "First half goals under 1.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "total_goals_5_plus",
+            "description": "Total goals \u2265 5",
+            "event_type": "goals",
+            "market": "total_goals_exact"
+          },
+          {
+            "name": "away_win",
+            "description": "Away team wins",
+            "event_type": "team_stats",
+            "market": "1x2"
+          },
+          {
+            "name": "second_half_draw",
+            "description": "Second half: Draw",
+            "event_type": "half_stats",
+            "market": "second_half_1x2"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "total_goals_5_plus",
+            "description": "Total goals \u2265 5",
+            "event_type": "goals",
+            "market": "total_goals_exact"
+          },
+          {
+            "name": "away_win_dnb",
+            "description": "Away win (draw no bet)",
+            "event_type": "team_stats",
+            "market": "draw_no_bet"
+          },
+          {
+            "name": "second_half_draw",
+            "description": "Second half: Draw",
+            "event_type": "half_stats",
+            "market": "second_half_1x2"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "total_goals_5_plus",
+            "description": "Total goals \u2265 5",
+            "event_type": "goals",
+            "market": "total_goals_exact"
+          },
+          {
+            "name": "away_away",
+            "description": "Away/Away (HT/FT)",
+            "event_type": "team_stats",
+            "market": "halftime_fulltime"
+          },
+          {
+            "name": "second_half_draw",
+            "description": "Second half: Draw",
+            "event_type": "half_stats",
+            "market": "second_half_1x2"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "total_goals_5_plus",
+            "description": "Total goals \u2265 5",
+            "event_type": "goals",
+            "market": "total_goals_exact"
+          },
+          {
+            "name": "home_no_bet_away",
+            "description": "Home no bet: Away",
+            "event_type": "team_stats",
+            "market": "home_no_bet"
+          },
+          {
+            "name": "second_half_draw",
+            "description": "Second half: Draw",
+            "event_type": "half_stats",
+            "market": "second_half_1x2"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "over_4_5_goals",
+            "description": "Total goals over 4.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "away_win",
+            "description": "Away team wins",
+            "event_type": "team_stats",
+            "market": "1x2"
+          },
+          {
+            "name": "second_half_draw",
+            "description": "Second half: Draw",
+            "event_type": "half_stats",
+            "market": "second_half_1x2"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "over_4_5_goals",
+            "description": "Total goals over 4.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "away_win_dnb",
+            "description": "Away win (draw no bet)",
+            "event_type": "team_stats",
+            "market": "draw_no_bet"
+          },
+          {
+            "name": "second_half_draw",
+            "description": "Second half: Draw",
+            "event_type": "half_stats",
+            "market": "second_half_1x2"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "over_4_5_goals",
+            "description": "Total goals over 4.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "away_away",
+            "description": "Away/Away (HT/FT)",
+            "event_type": "team_stats",
+            "market": "halftime_fulltime"
+          },
+          {
+            "name": "second_half_draw",
+            "description": "Second half: Draw",
+            "event_type": "half_stats",
+            "market": "second_half_1x2"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "over_4_5_goals",
+            "description": "Total goals over 4.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "home_no_bet_away",
+            "description": "Home no bet: Away",
+            "event_type": "team_stats",
+            "market": "home_no_bet"
+          },
+          {
+            "name": "second_half_draw",
+            "description": "Second half: Draw",
+            "event_type": "half_stats",
+            "market": "second_half_1x2"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "over_5_5_goals",
+            "description": "Total goals over 5.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "away_win",
+            "description": "Away team wins",
+            "event_type": "team_stats",
+            "market": "1x2"
+          },
+          {
+            "name": "second_half_draw",
+            "description": "Second half: Draw",
+            "event_type": "half_stats",
+            "market": "second_half_1x2"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "over_5_5_goals",
+            "description": "Total goals over 5.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "home_or_away",
+            "description": "Home win or away win",
+            "event_type": "team_stats",
+            "market": "double_chance"
+          },
+          {
+            "name": "second_half_draw",
+            "description": "Second half: Draw",
+            "event_type": "half_stats",
+            "market": "second_half_1x2"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "over_5_5_goals",
+            "description": "Total goals over 5.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "away_win_dnb",
+            "description": "Away win (draw no bet)",
+            "event_type": "team_stats",
+            "market": "draw_no_bet"
+          },
+          {
+            "name": "second_half_draw",
+            "description": "Second half: Draw",
+            "event_type": "half_stats",
+            "market": "second_half_1x2"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "over_5_5_goals",
+            "description": "Total goals over 5.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "away_away",
+            "description": "Away/Away (HT/FT)",
+            "event_type": "team_stats",
+            "market": "halftime_fulltime"
+          },
+          {
+            "name": "second_half_draw",
+            "description": "Second half: Draw",
+            "event_type": "half_stats",
+            "market": "second_half_1x2"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "over_5_5_goals",
+            "description": "Total goals over 5.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "home_no_bet_away",
+            "description": "Home no bet: Away",
+            "event_type": "team_stats",
+            "market": "home_no_bet"
+          },
+          {
+            "name": "second_half_draw",
+            "description": "Second half: Draw",
+            "event_type": "half_stats",
+            "market": "second_half_1x2"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "home_over_1_5",
+            "description": "Home team over 1.5 goals",
+            "event_type": "goals",
+            "market": "team_total_goals_home"
+          },
+          {
+            "name": "away_win",
+            "description": "Away team wins",
+            "event_type": "team_stats",
+            "market": "1x2"
+          },
+          {
+            "name": "second_half_draw",
+            "description": "Second half: Draw",
+            "event_type": "half_stats",
+            "market": "second_half_1x2"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "home_over_1_5",
+            "description": "Home team over 1.5 goals",
+            "event_type": "goals",
+            "market": "team_total_goals_home"
+          },
+          {
+            "name": "away_win_dnb",
+            "description": "Away win (draw no bet)",
+            "event_type": "team_stats",
+            "market": "draw_no_bet"
+          },
+          {
+            "name": "second_half_draw",
+            "description": "Second half: Draw",
+            "event_type": "half_stats",
+            "market": "second_half_1x2"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "home_over_1_5",
+            "description": "Home team over 1.5 goals",
+            "event_type": "goals",
+            "market": "team_total_goals_home"
+          },
+          {
+            "name": "away_away",
+            "description": "Away/Away (HT/FT)",
+            "event_type": "team_stats",
+            "market": "halftime_fulltime"
+          },
+          {
+            "name": "second_half_draw",
+            "description": "Second half: Draw",
+            "event_type": "half_stats",
+            "market": "second_half_1x2"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 1,
+        "percentage": 0.26246719160104987,
+        "strategy": "by_event_type"
+      }
+    ],
+    "most_occurred": [
+      {
+        "events": [
+          {
+            "name": "excluded_goals_0",
+            "description": "Excluded: 0 goals",
+            "event_type": "goals",
+            "market": "excluded_goals"
+          },
+          {
+            "name": "second_half_over_0_5",
+            "description": "Second half goals over 0.5",
+            "event_type": "half_stats",
+            "market": "second_half_over_under"
+          },
+          {
+            "name": "corner_range_0_8",
+            "description": "Corner range 0-8",
+            "event_type": "corners",
+            "market": "corner_range"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 303,
+        "percentage": 79.52755905511812,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "excluded_goals_0",
+            "description": "Excluded: 0 goals",
+            "event_type": "goals",
+            "market": "excluded_goals"
+          },
+          {
+            "name": "second_half_over_0_5",
+            "description": "Second half goals over 0.5",
+            "event_type": "half_stats",
+            "market": "second_half_over_under"
+          },
+          {
+            "name": "corners_even",
+            "description": "Total corners even",
+            "event_type": "corners",
+            "market": "odd_even_corners"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 303,
+        "percentage": 79.52755905511812,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "under_5_5_goals",
+            "description": "Total goals under 5.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "first_half_btts_no",
+            "description": "Not both teams score in first half",
+            "event_type": "half_stats",
+            "market": "first_half_btts"
+          },
+          {
+            "name": "corner_range_0_8",
+            "description": "Corner range 0-8",
+            "event_type": "corners",
+            "market": "corner_range"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 303,
+        "percentage": 79.52755905511812,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "under_5_5_goals",
+            "description": "Total goals under 5.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "first_half_btts_no",
+            "description": "Not both teams score in first half",
+            "event_type": "half_stats",
+            "market": "first_half_btts"
+          },
+          {
+            "name": "corners_even",
+            "description": "Total corners even",
+            "event_type": "corners",
+            "market": "odd_even_corners"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 303,
+        "percentage": 79.52755905511812,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "btts_both_halves_no",
+            "description": "Not both teams score in both halves",
+            "event_type": "goals",
+            "market": "btts_both_halves"
+          },
+          {
+            "name": "first_half_btts_no",
+            "description": "Not both teams score in first half",
+            "event_type": "half_stats",
+            "market": "first_half_btts"
+          },
+          {
+            "name": "corner_range_0_8",
+            "description": "Corner range 0-8",
+            "event_type": "corners",
+            "market": "corner_range"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 307,
+        "percentage": 80.5774278215223,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "btts_both_halves_no",
+            "description": "Not both teams score in both halves",
+            "event_type": "goals",
+            "market": "btts_both_halves"
+          },
+          {
+            "name": "first_half_btts_no",
+            "description": "Not both teams score in first half",
+            "event_type": "half_stats",
+            "market": "first_half_btts"
+          },
+          {
+            "name": "corners_even",
+            "description": "Total corners even",
+            "event_type": "corners",
+            "market": "odd_even_corners"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 307,
+        "percentage": 80.5774278215223,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "multigoals_1_4",
+            "description": "Multigoals: 1-4 goals",
+            "event_type": "goals",
+            "market": "multigoals"
+          },
+          {
+            "name": "first_half_under_2_5",
+            "description": "First half goals under 2.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          },
+          {
+            "name": "corner_range_0_8",
+            "description": "Corner range 0-8",
+            "event_type": "corners",
+            "market": "corner_range"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 308,
+        "percentage": 80.83989501312337,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "multigoals_1_4",
+            "description": "Multigoals: 1-4 goals",
+            "event_type": "goals",
+            "market": "multigoals"
+          },
+          {
+            "name": "first_half_under_2_5",
+            "description": "First half goals under 2.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          },
+          {
+            "name": "corners_even",
+            "description": "Total corners even",
+            "event_type": "corners",
+            "market": "odd_even_corners"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 308,
+        "percentage": 80.83989501312337,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "over_0_5_goals",
+            "description": "Total goals over 0.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "first_half_under_2_5",
+            "description": "First half goals under 2.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          },
+          {
+            "name": "corner_range_0_8",
+            "description": "Corner range 0-8",
+            "event_type": "corners",
+            "market": "corner_range"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 326,
+        "percentage": 85.56430446194226,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "over_0_5_goals",
+            "description": "Total goals over 0.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "first_half_under_2_5",
+            "description": "First half goals under 2.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          },
+          {
+            "name": "corners_even",
+            "description": "Total corners even",
+            "event_type": "corners",
+            "market": "odd_even_corners"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 326,
+        "percentage": 85.56430446194226,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "excluded_goals_0",
+            "description": "Excluded: 0 goals",
+            "event_type": "goals",
+            "market": "excluded_goals"
+          },
+          {
+            "name": "first_half_under_2_5",
+            "description": "First half goals under 2.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          },
+          {
+            "name": "corner_range_0_8",
+            "description": "Corner range 0-8",
+            "event_type": "corners",
+            "market": "corner_range"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 326,
+        "percentage": 85.56430446194226,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "excluded_goals_0",
+            "description": "Excluded: 0 goals",
+            "event_type": "goals",
+            "market": "excluded_goals"
+          },
+          {
+            "name": "first_half_under_2_5",
+            "description": "First half goals under 2.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          },
+          {
+            "name": "corners_even",
+            "description": "Total corners even",
+            "event_type": "corners",
+            "market": "odd_even_corners"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 326,
+        "percentage": 85.56430446194226,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "under_4_5_goals",
+            "description": "Total goals under 4.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "first_half_under_2_5",
+            "description": "First half goals under 2.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          },
+          {
+            "name": "corner_range_0_8",
+            "description": "Corner range 0-8",
+            "event_type": "corners",
+            "market": "corner_range"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 328,
+        "percentage": 86.08923884514435,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "under_4_5_goals",
+            "description": "Total goals under 4.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "first_half_under_2_5",
+            "description": "First half goals under 2.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          },
+          {
+            "name": "corners_even",
+            "description": "Total corners even",
+            "event_type": "corners",
+            "market": "odd_even_corners"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 328,
+        "percentage": 86.08923884514435,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "excluded_goals_5_plus",
+            "description": "Excluded: 5+ goals",
+            "event_type": "goals",
+            "market": "excluded_goals"
+          },
+          {
+            "name": "first_half_under_2_5",
+            "description": "First half goals under 2.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          },
+          {
+            "name": "corner_range_0_8",
+            "description": "Corner range 0-8",
+            "event_type": "corners",
+            "market": "corner_range"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 328,
+        "percentage": 86.08923884514435,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "excluded_goals_5_plus",
+            "description": "Excluded: 5+ goals",
+            "event_type": "goals",
+            "market": "excluded_goals"
+          },
+          {
+            "name": "first_half_under_2_5",
+            "description": "First half goals under 2.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          },
+          {
+            "name": "corners_even",
+            "description": "Total corners even",
+            "event_type": "corners",
+            "market": "odd_even_corners"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 328,
+        "percentage": 86.08923884514435,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "btts_both_halves_no",
+            "description": "Not both teams score in both halves",
+            "event_type": "goals",
+            "market": "btts_both_halves"
+          },
+          {
+            "name": "first_half_under_2_5",
+            "description": "First half goals under 2.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          },
+          {
+            "name": "corner_range_0_8",
+            "description": "Corner range 0-8",
+            "event_type": "corners",
+            "market": "corner_range"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 334,
+        "percentage": 87.66404199475065,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "btts_both_halves_no",
+            "description": "Not both teams score in both halves",
+            "event_type": "goals",
+            "market": "btts_both_halves"
+          },
+          {
+            "name": "first_half_under_2_5",
+            "description": "First half goals under 2.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          },
+          {
+            "name": "corners_even",
+            "description": "Total corners even",
+            "event_type": "corners",
+            "market": "odd_even_corners"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 334,
+        "percentage": 87.66404199475065,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "under_5_5_goals",
+            "description": "Total goals under 5.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "first_half_under_2_5",
+            "description": "First half goals under 2.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          },
+          {
+            "name": "corner_range_0_8",
+            "description": "Corner range 0-8",
+            "event_type": "corners",
+            "market": "corner_range"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 343,
+        "percentage": 90.02624671916011,
+        "strategy": "by_event_type"
+      },
+      {
+        "events": [
+          {
+            "name": "under_5_5_goals",
+            "description": "Total goals under 5.5",
+            "event_type": "goals",
+            "market": "total_goals_over_under"
+          },
+          {
+            "name": "first_half_under_2_5",
+            "description": "First half goals under 2.5",
+            "event_type": "half_stats",
+            "market": "first_half_over_under"
+          },
+          {
+            "name": "corners_even",
+            "description": "Total corners even",
+            "event_type": "corners",
+            "market": "odd_even_corners"
+          }
+        ],
+        "combination_size": 3,
+        "occurrence_count": 343,
+        "percentage": 90.02624671916011,
+        "strategy": "by_event_type"
+      }
+    ],
+    "stats": {
+      "total_combinations_checked": 80,
+      "valid_combinations_count": 11288,
+      "never_occurred_count": 0,
+      "occurred_count": 80,
+      "min_occurrence": 1,
+      "max_occurrence": 343,
+      "avg_occurrence": 141.1
+    }
+  }
+}

@@ -117,6 +117,7 @@ class ResultsManager:
 
         except Exception as e:
             self.logger.error(f"Failed to save results: {e}")
+
     def initialize_league_season(self, league_id: int, league_name: str, season: int, total_matches: int):
         """Initialize a new league/season entry"""
         league_key = str(league_id)

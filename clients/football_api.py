@@ -164,13 +164,10 @@ class APIFootballClient:
         """Enrich match data with events, statistics, and detailed info"""
         # Check if we have complete cached match data in organized cache
         match_details = self.cache.get_match_details(match.league_id, match.season, match.id)
-        if match_details and match_details.get('has_details'):  # Changed from 'processed' to 'has_details'
+        if match_details and match_details.get('processed'):
             # Load from organized cache
-            self.logger.info(f"📦 Loading match {match.id} from cache")
             self._load_match_from_organized_cache(match, match_details)
             return
-
-        self.logger.info(f"🔄 Fetching details for match {match.id} from API")
 
         # Get match events using organized cache
         events_data = self.get_match_events(match.id, match.league_id, match.season)
